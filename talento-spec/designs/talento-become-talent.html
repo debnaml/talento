@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talento — Become Talent · Your Casting Call Starts Here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,700&family=Barlow:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange:     #E8500A;
+  --orange-hot: #FF6020;
+  --orange-dim: #7A2800;
+  --dark:       #0D0D10;
+  --dark2:      #13131A;
+  --dark3:      #1A1A24;
+  --mid:        #28283A;
+  --grey:       #64648A;
+  --silver:     #9898B8;
+  --white:      #F2F0EC;
+  --cream:      #E8E4DC;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* grain */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.4;
+}
+
+/* ── NAV ──────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 68px;
+  background: linear-gradient(to bottom, rgba(13,13,16,0.96) 0%, rgba(13,13,16,0) 100%);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 3px;
+  color: var(--white); text-decoration: none;
+}
+.nav-logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--silver); text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--white); }
+.nav-links a.active { color: var(--orange); }
+.nav-cta {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--orange); color: white; border: none;
+  padding: 9px 22px; cursor: pointer; transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--orange-hot); }
+
+/* ── HERO — CASTING CALL POSTER ───────────────── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+  padding-top: 68px;
+}
+
+/* Dramatic diagonal split background */
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(168deg, var(--dark) 0%, var(--dark) 55%, var(--dark3) 55%, var(--dark2) 100%);
+}
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 50%, rgba(232,80,10,0.09) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 40% at 20% 80%, rgba(232,80,10,0.05) 0%, transparent 60%);
+}
+
+/* Giant typographic "CASTING CALL" watermark */
+.hero-watermark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(80px, 14vw, 200px);
+  letter-spacing: -4px;
+  color: rgba(255,255,255,0.025);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  line-height: 1;
+}
+
+.hero-inner {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  flex: 1;
+}
+
+/* Left — the big pitch */
+.hero-left {
+  padding: 80px 48px 80px 48px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid rgba(255,255,255,0.04);
+}
+
+.casting-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.7s 0.1s forwards;
+}
+.casting-label-bar {
+  width: 32px; height: 2px; background: var(--orange);
+}
+.casting-label span {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--orange);
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(64px, 8vw, 110px);
+  line-height: 0.9;
+  letter-spacing: 1px;
+  color: var(--white);
+  margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-headline .line-orange { color: var(--orange); }
+.hero-headline .line-indent { padding-left: 24px; }
+
+.hero-subhead {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 300; font-style: italic;
+  color: var(--silver);
+  line-height: 1.4;
+  margin-bottom: 40px;
+  max-width: 480px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+}
+
+/* Film role examples — the fun part */
+.role-examples {
+  display: flex; flex-direction: column; gap: 0;
+  margin-bottom: 44px;
+  opacity: 0; animation: fadeUp 0.8s 0.45s forwards;
+}
+.role-example {
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: default;
+  transition: all 0.2s;
+}
+.role-example:first-child { border-top: 1px solid rgba(255,255,255,0.05); }
+.role-example:hover { background: rgba(232,80,10,0.04); margin: 0 -16px; padding: 10px 16px; }
+.role-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px; letter-spacing: 1px;
+  color: var(--orange-dim);
+  flex-shrink: 0; width: 24px;
+}
+.role-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 400; letter-spacing: 0.5px;
+  color: var(--silver);
+  line-height: 1.3;
+}
+.role-text strong {
+  font-weight: 700; color: var(--white); font-style: normal;
+}
+.role-tag {
+  margin-left: auto; flex-shrink: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--grey);
+}
+
+.hero-ctas {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.8s 0.55s forwards;
+}
+.btn-primary {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  background: var(--orange); color: white; border: none;
+  padding: 16px 36px; cursor: pointer; transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.btn-primary:hover { background: var(--orange-hot); transform: translateY(-1px); }
+.btn-ghost {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  background: transparent; color: var(--white);
+  border: 1px solid rgba(244,242,238,0.2);
+  padding: 16px 36px; cursor: pointer; transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.04); }
+
+/* Right — stats/agency credential panel */
+.hero-right {
+  padding: 80px 48px;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: 2px;
+}
+
+.agency-badge {
+  background: var(--dark3);
+  border-left: 3px solid var(--orange);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+}
+.agency-badge-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 8px;
+}
+.agency-badge-text {
+  font-size: 14px; font-weight: 300; line-height: 1.6;
+  color: var(--silver);
+}
+.agency-badge-text strong { color: var(--white); font-weight: 500; }
+
+.stat-blocks {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.stat-block {
+  background: var(--dark3);
+  padding: 24px;
+}
+.stat-block-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 44px; letter-spacing: 1px;
+  color: var(--orange); line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-block-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--grey);
+}
+
+.key-preview {
+  background: var(--dark3);
+  padding: 24px 28px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(232,80,10,0.2);
+  opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+}
+.key-preview-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--grey);
+  margin-bottom: 10px;
+}
+.key-preview-key {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing: 4px;
+  color: var(--orange);
+  background: rgba(232,80,10,0.06);
+  padding: 10px 16px;
+  display: inline-block;
+  margin-bottom: 10px;
+  border: 1px solid rgba(232,80,10,0.15);
+}
+.key-preview-sub {
+  font-size: 12px; font-weight: 300;
+  color: var(--grey); line-height: 1.5;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── GENRES / CASTING CATEGORIES ─────────────── */
+.genres-section {
+  background: var(--dark2);
+  padding: 100px 48px;
+  position: relative; overflow: hidden;
+}
+.genres-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--orange), transparent);
+}
+
+.sec-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 8px;
+}
+.sec-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  letter-spacing: 2px; color: var(--white);
+  line-height: 1; margin-bottom: 12px;
+}
+.sec-sub {
+  font-size: 15px; font-weight: 300; line-height: 1.6;
+  color: var(--silver); max-width: 560px; margin-bottom: 60px;
+}
+
+.genre-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+
+.genre-card {
+  position: relative; overflow: hidden;
+  padding: 40px 28px 32px;
+  background: var(--dark3);
+  cursor: pointer;
+  transition: background 0.3s;
+  border-top: 2px solid transparent;
+  min-height: 280px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.genre-card:hover {
+  background: var(--mid);
+  border-top-color: var(--orange);
+}
+
+.genre-bg-text {
+  position: absolute; top: 12px; left: 16px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 88px; line-height: 1;
+  color: rgba(255,255,255,0.03);
+  pointer-events: none; letter-spacing: -2px;
+}
+
+.genre-icon {
+  font-size: 32px; margin-bottom: 16px;
+  display: block;
+  filter: grayscale(0.3);
+}
+
+.genre-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing: 1.5px;
+  color: var(--white); margin-bottom: 10px;
+  line-height: 1;
+}
+
+.genre-examples {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 300; font-style: italic;
+  color: var(--grey); line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.genre-pay {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--orange);
+}
+
+/* Second row — wider cards */
+.genre-grid-wide {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+/* ── HOW YOUR KEY PROTECTS YOU ────────────────── */
+.key-section {
+  background: var(--dark);
+  padding: 100px 48px;
+  position: relative;
+}
+
+.key-explainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+  margin-top: 60px;
+}
+
+.key-left h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; letter-spacing: 1px;
+  color: var(--white); margin-bottom: 16px;
+}
+.key-left p {
+  font-size: 15px; font-weight: 300; line-height: 1.7;
+  color: var(--silver); margin-bottom: 16px;
+}
+.key-left p strong { color: var(--white); font-weight: 500; }
+
+.key-anatomy {
+  background: var(--dark3);
+  border: 1px solid rgba(232,80,10,0.15);
+  padding: 32px;
+  margin-top: 32px;
+}
+.key-anatomy-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--grey);
+  margin-bottom: 16px;
+}
+.key-display {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; letter-spacing: 5px;
+  color: var(--white); display: flex; gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.key-seg { padding: 6px 0; }
+.key-seg.seg-prefix { color: var(--orange); }
+.key-seg.seg-id     { color: var(--white); }
+.key-seg.seg-proj   { color: var(--silver); }
+.key-seg.seg-sup    { color: var(--grey); }
+.key-sep-char       { color: var(--orange-dim); padding: 6px 2px; }
+
+.key-breakdown {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.key-part {
+  display: flex; align-items: center; gap: 12px;
+}
+.key-part-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.dot-orange { background: var(--orange); }
+.dot-white  { background: var(--white); }
+.dot-silver { background: var(--silver); }
+.dot-grey   { background: var(--grey); }
+.key-part-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 400; color: var(--silver);
+}
+.key-part-text strong { color: var(--white); font-weight: 600; }
+
+/* Right — protection features */
+.key-right {
+  display: flex; flex-direction: column; gap: 2px;
+  margin-top: 8px;
+}
+
+.protect-card {
+  background: var(--dark3);
+  padding: 28px 24px;
+  border-left: 2px solid transparent;
+  transition: all 0.25s;
+  cursor: default;
+}
+.protect-card:hover {
+  background: var(--mid);
+  border-left-color: var(--orange);
+  transform: translateX(4px);
+}
+
+.protect-icon {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(232,80,10,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; margin-bottom: 14px; color: var(--orange);
+}
+.protect-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--white); margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.protect-desc {
+  font-size: 13px; font-weight: 300; line-height: 1.6;
+  color: var(--silver);
+}
+.protect-desc strong { color: var(--white); font-weight: 500; }
+
+/* ── PERMISSIONS BUILDER ──────────────────────── */
+.perms-section {
+  background: var(--dark2);
+  padding: 100px 48px;
+  position: relative;
+}
+.perms-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,80,10,0.25), transparent);
+}
+
+.perms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 60px;
+  align-items: start;
+}
+
+.perms-intro p {
+  font-size: 15px; font-weight: 300; line-height: 1.7;
+  color: var(--silver); margin-bottom: 14px;
+}
+.perms-intro p strong { color: var(--white); font-weight: 500; }
+.perms-quote {
+  border-left: 3px solid var(--orange);
+  padding: 16px 20px;
+  margin-top: 24px;
+  background: rgba(232,80,10,0.04);
+}
+.perms-quote p {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 18px; font-style: italic; font-weight: 300;
+  color: var(--white); line-height: 1.4; margin: 0;
+}
+
+.perms-toggles {
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.perm-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--dark3);
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  gap: 16px;
+}
+.perm-row:hover { background: var(--mid); }
+.perm-row.on  { border-left: 2px solid var(--orange); }
+.perm-row.off { border-left: 2px solid var(--grey); opacity: 0.6; }
+
+.perm-info { flex: 1; }
+.perm-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--white); text-transform: uppercase; margin-bottom: 3px;
+}
+.perm-detail {
+  font-size: 12px; font-weight: 300;
+  color: var(--grey); line-height: 1.4;
+}
+
+.perm-toggle {
+  flex-shrink: 0;
+  width: 44px; height: 24px;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+.perm-toggle.on  { background: var(--orange); }
+.perm-toggle.off { background: var(--mid); border: 1px solid var(--grey); }
+.perm-toggle::after {
+  content: '';
+  position: absolute; top: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: white;
+  transition: left 0.3s;
+}
+.perm-toggle.on::after  { left: 23px; }
+.perm-toggle.off::after { left: 3px; }
+
+.perm-earn {
+  flex-shrink: 0;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; font-weight: 700;
+  color: var(--orange); min-width: 60px; text-align: right;
+}
+
+/* ── SIGN UP FLOW ─────────────────────────────── */
+.signup-section {
+  background: var(--dark);
+  padding: 100px 48px;
+}
+
+.signup-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin: 60px 0 64px;
+  position: relative;
+}
+.signup-steps::before {
+  content: '';
+  position: absolute; top: 32px; left: 12.5%; right: 12.5%; height: 1px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-dim), var(--orange));
+}
+
+.signup-step {
+  padding: 0 24px; position: relative; z-index: 1;
+  opacity: 0; animation: fadeUp 0.6s forwards;
+}
+.signup-step:nth-child(1) { animation-delay: 0.1s; }
+.signup-step:nth-child(2) { animation-delay: 0.25s; }
+.signup-step:nth-child(3) { animation-delay: 0.4s; }
+.signup-step:nth-child(4) { animation-delay: 0.55s; }
+
+.step-bubble {
+  width: 64px; height: 64px;
+  border: 1px solid var(--orange);
+  background: var(--dark);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; letter-spacing: 1px;
+  color: var(--orange); margin-bottom: 20px;
+}
+
+.step-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 1px;
+  color: var(--white); margin-bottom: 8px;
+}
+.step-desc {
+  font-size: 13px; font-weight: 300; line-height: 1.6;
+  color: var(--silver);
+}
+
+/* Form area */
+.signup-form-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.form-panel {
+  background: var(--dark3);
+  padding: 40px;
+  border-top: 2px solid var(--orange);
+}
+
+.form-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; letter-spacing: 1.5px;
+  color: var(--white); margin-bottom: 6px;
+}
+.form-sub {
+  font-size: 13px; font-weight: 300;
+  color: var(--silver); margin-bottom: 32px;
+}
+
+.form-field { margin-bottom: 20px; }
+.form-field label {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--grey);
+  margin-bottom: 8px;
+}
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  background: var(--dark2);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  font-size: 14px; font-weight: 300;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  border-color: var(--orange);
+}
+.form-field textarea { resize: vertical; min-height: 80px; }
+.form-field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B6B85' d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.upload-zone {
+  border: 1px dashed rgba(232,80,10,0.3);
+  background: rgba(232,80,10,0.03);
+  padding: 32px 20px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s; margin-bottom: 20px;
+}
+.upload-zone:hover {
+  border-color: var(--orange);
+  background: rgba(232,80,10,0.06);
+}
+.upload-icon { font-size: 28px; margin-bottom: 10px; }
+.upload-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 1px;
+  color: var(--white); margin-bottom: 4px;
+}
+.upload-sub { font-size: 12px; color: var(--grey); }
+.upload-types {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+  color: var(--orange); margin-top: 8px;
+}
+
+.submit-btn {
+  width: 100%;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 800; letter-spacing: 3px;
+  text-transform: uppercase;
+  background: var(--orange); color: white; border: none;
+  padding: 18px; cursor: pointer; transition: all 0.2s;
+  margin-top: 4px;
+}
+.submit-btn:hover { background: var(--orange-hot); transform: translateY(-1px); }
+
+.consent-note {
+  font-size: 11px; font-weight: 300; line-height: 1.5;
+  color: var(--grey); margin-top: 14px; text-align: center;
+}
+.consent-note a { color: var(--silver); }
+
+/* Right panel — what you get */
+.benefit-panel { padding-top: 8px; }
+.benefit-panel h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px; letter-spacing: 1px;
+  color: var(--white); margin-bottom: 8px;
+}
+.benefit-panel > p {
+  font-size: 14px; font-weight: 300; line-height: 1.6;
+  color: var(--silver); margin-bottom: 32px;
+}
+
+.benefit-list { display: flex; flex-direction: column; gap: 2px; }
+.benefit-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  background: var(--dark3); padding: 20px;
+  border-left: 2px solid rgba(232,80,10,0.2);
+  transition: all 0.2s;
+}
+.benefit-item:hover {
+  border-left-color: var(--orange);
+  background: var(--mid);
+}
+.benefit-check {
+  width: 24px; height: 24px;
+  background: var(--orange); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: white; margin-top: 1px;
+}
+.benefit-text { flex: 1; }
+.benefit-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+  color: var(--white); text-transform: uppercase; margin-bottom: 4px;
+}
+.benefit-detail {
+  font-size: 12px; font-weight: 300; line-height: 1.5;
+  color: var(--silver);
+}
+.benefit-detail strong { color: var(--white); font-weight: 500; }
+
+/* Key callout in benefit panel */
+.key-callout {
+  background: linear-gradient(135deg, rgba(232,80,10,0.1) 0%, rgba(232,80,10,0.04) 100%);
+  border: 1px solid rgba(232,80,10,0.2);
+  padding: 24px; margin-top: 24px;
+}
+.key-callout-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 10px;
+}
+.key-callout-key {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 4px;
+  color: var(--white); margin-bottom: 8px;
+}
+.key-callout-key .proj-suffix {
+  color: var(--grey); font-size: 18px;
+}
+.key-callout-desc {
+  font-size: 12px; font-weight: 300; line-height: 1.5;
+  color: var(--silver);
+}
+
+/* ── EARNINGS PREVIEW ─────────────────────────── */
+.earnings-section {
+  background: var(--dark2);
+  padding: 100px 48px;
+  position: relative;
+}
+.earnings-section::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,80,10,0.3), transparent);
+}
+
+.earnings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  margin-top: 60px;
+}
+
+.earn-card {
+  background: var(--dark3);
+  padding: 36px 28px;
+  border-top: 2px solid transparent;
+  transition: all 0.3s;
+  cursor: default;
+}
+.earn-card:hover { border-top-color: var(--orange); background: var(--mid); }
+
+.earn-role {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+}
+.earn-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 1px;
+  color: var(--white); margin-bottom: 8px;
+  line-height: 1.1;
+}
+.earn-example {
+  font-size: 13px; font-weight: 300; font-style: italic;
+  color: var(--grey); margin-bottom: 20px; line-height: 1.5;
+}
+.earn-pay {
+  display: flex; align-items: baseline; gap: 6px;
+  margin-bottom: 4px;
+}
+.earn-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; letter-spacing: 1px;
+  color: var(--orange); line-height: 1;
+}
+.earn-per {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 400; letter-spacing: 1px;
+  color: var(--grey);
+}
+.earn-note {
+  font-size: 11px; font-weight: 300;
+  color: var(--grey); line-height: 1.5; margin-top: 12px;
+}
+
+/* ── TALENT TESTIMONIALS ──────────────────────── */
+.voices-section {
+  background: var(--dark);
+  padding: 100px 48px;
+}
+.voices-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 60px;
+}
+.voice-card {
+  background: var(--dark3);
+  padding: 32px 28px;
+  border-top: 2px solid var(--dark2);
+  transition: border-top-color 0.3s;
+}
+.voice-card:hover { border-top-color: var(--orange); }
+.voice-quote {
+  font-size: 15px; font-weight: 300; font-style: italic;
+  line-height: 1.7; color: var(--silver); margin-bottom: 24px;
+}
+.voice-quote::before { content: '"'; color: var(--orange); font-style: normal; font-size: 20px; }
+.voice-quote::after  { content: '"'; color: var(--orange); font-style: normal; font-size: 20px; }
+.voice-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: var(--white); margin-bottom: 3px;
+}
+.voice-role {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 400; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--grey);
+}
+.voice-earn {
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; font-weight: 600;
+  color: var(--orange);
+}
+
+/* ── CTA BANNER ───────────────────────────────── */
+.cta-banner {
+  background: var(--orange);
+  padding: 80px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+  position: relative; overflow: hidden;
+}
+.cta-banner::before {
+  content: 'CASTING OPEN';
+  position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 180px; line-height: 1;
+  color: rgba(0,0,0,0.08); white-space: nowrap;
+  pointer-events: none; letter-spacing: -4px;
+}
+.cta-left {}
+.cta-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+}
+.cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 64px); letter-spacing: 2px;
+  color: white; line-height: 1;
+}
+.cta-btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 800; letter-spacing: 2.5px;
+  text-transform: uppercase;
+  background: var(--dark); color: white;
+  border: none; padding: 20px 48px;
+  cursor: pointer; transition: all 0.2s;
+  white-space: nowrap; flex-shrink: 0;
+}
+.cta-btn:hover { background: rgba(0,0,0,0.8); transform: translateY(-1px); }
+
+/* ── FOOTER ───────────────────────────────────── */
+footer {
+  background: var(--dark2);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  padding: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px; letter-spacing: 3px; color: var(--white);
+}
+.footer-logo span { color: var(--orange); }
+.footer-links {
+  display: flex; gap: 32px; list-style: none;
+}
+.footer-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--grey); text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--white); }
+.footer-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--orange);
+}
+
+/* scroll fade-in utility */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="talento.html" class="nav-logo">TALEN<span>T</span>O</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Become Talent</a></li>
+    <li><a href="#">For Studios</a></li>
+    <li><a href="#">Auctions</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <button class="nav-cta">Register Now</button>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-watermark">CASTING OPEN</div>
+
+  <div class="hero-inner">
+    <!-- Left -->
+    <div class="hero-left">
+      <div class="casting-label">
+        <div class="casting-label-bar"></div>
+        <span>Global Casting Call — Now Open</span>
+      </div>
+
+      <h1 class="hero-headline">
+        YOUR<br>
+        <span class="line-orange">FACE.</span><br>
+        <span class="line-indent">YOUR</span><br>
+        CAREER.
+      </h1>
+
+      <p class="hero-subhead">
+        Ever wanted to be in a film? Get beaten up in a Hong Kong back alley.
+        Eaten by a dinosaur. Die heroically in a biblical epic.
+        Stand in the crowd as history is made. Now you can — without leaving home.
+      </p>
+
+      <div class="role-examples">
+        <div class="role-example">
+          <span class="role-num">01</span>
+          <span class="role-text"><strong>Hong Kong Action Sequence</strong> — bar fight, rooftop chase, villain henchman</span>
+          <span class="role-tag">Action</span>
+        </div>
+        <div class="role-example">
+          <span class="role-num">02</span>
+          <span class="role-text"><strong>Prehistoric Epic</strong> — eaten by a T-Rex, stampede survivor, cave tribe member</span>
+          <span class="role-tag">Sci-Fi</span>
+        </div>
+        <div class="role-example">
+          <span class="role-num">03</span>
+          <span class="role-text"><strong>Biblical Epic</strong> — marketplace crowd, Roman soldier, pilgrim in the wilderness</span>
+          <span class="role-tag">Historical</span>
+        </div>
+        <div class="role-example">
+          <span class="role-num">04</span>
+          <span class="role-text"><strong>Wartime Drama</strong> — soldier, resistance fighter, refugee, medic behind the lines</span>
+          <span class="role-tag">Drama</span>
+        </div>
+        <div class="role-example">
+          <span class="role-num">05</span>
+          <span class="role-text"><strong>D2C Brand Campaign</strong> — face on a product, model in a lifestyle ad, brand story</span>
+          <span class="role-tag">Commercial</span>
+        </div>
+      </div>
+
+      <div class="hero-ctas">
+        <button class="btn-primary" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Register as Talent</button>
+        <button class="btn-ghost" onclick="document.getElementById('how-key').scrollIntoView({behavior:'smooth'})">How Your Key Works</button>
+      </div>
+    </div>
+
+    <!-- Right -->
+    <div class="hero-right">
+      <div class="agency-badge">
+        <div class="agency-badge-label">Talento Represents You</div>
+        <div class="agency-badge-text">
+          Register once, set your terms, and earn every time your likeness is used in any production — anywhere in the world. <strong>No auditions. No waiting by the phone. No middleman.</strong> You are in the room the moment you register.
+        </div>
+      </div>
+
+      <div class="stat-blocks">
+        <div class="stat-block">
+          <div class="stat-block-num">48K+</div>
+          <div class="stat-block-label">Talent Registered</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-num">£4.8M</div>
+          <div class="stat-block-label">Paid to Talent</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-num">320+</div>
+          <div class="stat-block-label">Studio Partners</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-num">190+</div>
+          <div class="stat-block-label">Countries</div>
+        </div>
+      </div>
+
+      <div class="key-preview">
+        <div class="key-preview-label">Your Talento Identity Key — Issued on Registration</div>
+        <div class="key-preview-key">TL · AX93F · K28Q · 771</div>
+        <div class="key-preview-sub">
+          Every time your likeness is used in any production, a unique project key is generated from yours.
+          You see every use. You approve every use. You get paid for every use.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CASTING CATEGORIES ───────────────────────── -->
+<section class="genres-section">
+  <div class="sec-label">Open Roles</div>
+  <div class="sec-title">What Could You Be In?</div>
+  <p class="sec-sub">Studios, game developers, and brands are casting globally — right now. Every genre. Every type. Background roles to lead support. Your likeness, used with your permission.</p>
+
+  <div class="genre-grid">
+    <div class="genre-card">
+      <div class="genre-bg-text">ACT</div>
+      <span class="genre-icon">🎬</span>
+      <div class="genre-title">Action & Thriller</div>
+      <div class="genre-examples">Bar fights in Bangkok. Rooftop chases in Hong Kong. Car chases through narrow streets. Assassins, bodyguards, henchmen.</div>
+      <div class="genre-pay">From £80 per use</div>
+    </div>
+    <div class="genre-card">
+      <div class="genre-bg-text">SCI</div>
+      <span class="genre-icon">🦕</span>
+      <div class="genre-title">Sci-Fi & Prehistoric</div>
+      <div class="genre-examples">Dinosaur stampede survivors. Alien invasion crowds. Dystopian city dwellers. The person who doesn't make it out.</div>
+      <div class="genre-pay">From £60 per use</div>
+    </div>
+    <div class="genre-card">
+      <div class="genre-bg-text">EPIC</div>
+      <span class="genre-icon">⚔️</span>
+      <div class="genre-title">Historical Epic</div>
+      <div class="genre-examples">Biblical marketplace crowds. Roman centurions. Medieval peasants. Viking raiders. Pilgrims crossing continents.</div>
+      <div class="genre-pay">From £75 per use</div>
+    </div>
+    <div class="genre-card">
+      <div class="genre-bg-text">WAR</div>
+      <span class="genre-icon">🪖</span>
+      <div class="genre-title">War & Drama</div>
+      <div class="genre-examples">Soldiers on every front. Resistance fighters. Refugees. Field medics. The civilian faces that make war real.</div>
+      <div class="genre-pay">From £90 per use</div>
+    </div>
+  </div>
+
+  <div class="genre-grid-wide">
+    <div class="genre-card">
+      <div class="genre-bg-text">BRAND</div>
+      <span class="genre-icon">📦</span>
+      <div class="genre-title">D2C & Brand Campaigns</div>
+      <div class="genre-examples">Your face on a product. Your likeness in a personalized gift. Lifestyle campaigns, brand storytelling, product photography — all AI-generated, all fully licensed.</div>
+      <div class="genre-pay">From £25 per product license</div>
+    </div>
+    <div class="genre-card">
+      <div class="genre-bg-text">GAME</div>
+      <span class="genre-icon">🎮</span>
+      <div class="genre-title">Gaming & Esports</div>
+      <div class="genre-examples">NPCs. Crowd characters. Customizable skins. Your face in a game played by millions.</div>
+      <div class="genre-pay">From £50 per character license</div>
+    </div>
+    <div class="genre-card">
+      <div class="genre-bg-text">SPORT</div>
+      <span class="genre-icon">🏆</span>
+      <div class="genre-title">Sports & Live Events</div>
+      <div class="genre-examples">Stadium crowds. Fan recreations. Athlete stand-ins. AI sports broadcasts and game replays.</div>
+      <div class="genre-pay">From £40 per event</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW YOUR KEY PROTECTS YOU ──────────────── -->
+<section class="key-section" id="how-key">
+  <div class="sec-label">The Talento Identity System</div>
+  <div class="sec-title">Your Key. Your Control.</div>
+
+  <div class="key-explainer">
+    <div class="key-left">
+      <h3>One identity. Infinite protection.</h3>
+      <p>When you register, Talento issues you a <strong>Talento Identity Key (TIK)</strong> — a unique cryptographic credential that belongs to you permanently. No platform, studio, or buyer can revoke it.</p>
+      <p>Every single time your likeness is used in a production, a <strong>unique project key is generated</strong> from your TIK. That project key identifies the buyer, the production, the use type, and the territory. You can see every single one in your dashboard.</p>
+      <p>If a buyer exceeds their license — uses your face in a country they didn't pay for, in content you didn't approve, beyond the time they licensed — the system flags it automatically. <strong>You always know who has your face. And so do we.</strong></p>
+
+      <div class="key-anatomy">
+        <div class="key-anatomy-label">Anatomy of Your Key</div>
+        <div class="key-display">
+          <span class="key-seg seg-prefix">TL</span>
+          <span class="key-sep-char"> · </span>
+          <span class="key-seg seg-id">AX93F·K28Q·771</span>
+          <span class="key-sep-char"> · </span>
+          <span class="key-seg seg-proj">PRJ042</span>
+          <span class="key-sep-char"> · </span>
+          <span class="key-seg seg-sup">STU009</span>
+        </div>
+        <div class="key-breakdown">
+          <div class="key-part">
+            <div class="key-part-dot dot-orange"></div>
+            <span class="key-part-text"><strong>TL</strong> — Talento platform identifier</span>
+          </div>
+          <div class="key-part">
+            <div class="key-part-dot dot-white"></div>
+            <span class="key-part-text"><strong>AX93F·K28Q·771</strong> — Your unique personal identity key. Permanent. Yours forever.</span>
+          </div>
+          <div class="key-part">
+            <div class="key-part-dot dot-silver"></div>
+            <span class="key-part-text"><strong>PRJ042</strong> — Unique project code. Generated per production. Tracks exact use.</span>
+          </div>
+          <div class="key-part">
+            <div class="key-part-dot dot-grey"></div>
+            <span class="key-part-text"><strong>STU009</strong> — Buyer/studio identifier. Who used your likeness, and when.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="key-right">
+      <div class="protect-card">
+        <div class="protect-icon">👁</div>
+        <div class="protect-title">Full Visibility of Every Use</div>
+        <div class="protect-desc">Your dashboard shows every active license in real time. <strong>Film title. Studio name. Territory. Duration.</strong> Nothing is hidden. Every use is logged.</div>
+      </div>
+      <div class="protect-card">
+        <div class="protect-icon">🔑</div>
+        <div class="protect-title">Unique Key Per Project</div>
+        <div class="protect-desc">Each production gets its own unique project key derived from yours. This means you can track <strong>every single production independently</strong> — a Hollywood blockbuster and a greeting card are separate, auditable records.</div>
+      </div>
+      <div class="protect-card">
+        <div class="protect-icon">⚡</div>
+        <div class="protect-title">Automatic Scope Protection</div>
+        <div class="protect-desc">License a buyer for UK advertising. If they try to run it in Germany, <strong>the API returns unauthorized</strong>. If the 90-day license expires, it cuts off. Automatically. No lawyers required.</div>
+      </div>
+      <div class="protect-card">
+        <div class="protect-icon">💳</div>
+        <div class="protect-title">Instant Payment Per Use</div>
+        <div class="protect-desc">Every verified license event triggers your payment automatically. <strong>No invoicing. No chasing. No middlemen.</strong> Your earnings clear within 48 hours.</div>
+      </div>
+      <div class="protect-card">
+        <div class="protect-icon">🚫</div>
+        <div class="protect-title">You Set the Limits</div>
+        <div class="protect-desc">Block adult content. Block political use. Block competitor brands. Block specific geographies. Your permissions are <strong>enforced at the API level</strong>, not just written in a contract.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PERMISSIONS ─────────────────────────────── -->
+<section class="perms-section">
+  <div class="sec-label">Your Rules</div>
+  <div class="sec-title">You Decide What You Allow</div>
+
+  <div class="perms-grid">
+    <div class="perms-intro">
+      <p>This is not a checkbox you tick and forget. Your permissions are <strong>live, enforceable rules</strong> built into every license key that includes your identity.</p>
+      <p>Change your mind? Update your permissions and every future license reflects it instantly. <strong>Existing licenses run to their agreed term</strong> — your commitments are honored — but nothing new gets issued outside your current rules.</p>
+      <p>Want to allow gaming but not advertising? Fine. UK and EU only? Done. No adult content, ever? Enforced at the API level — no studio can override it.</p>
+
+      <div class="perms-quote">
+        <p>This is the difference between a contract no-one reads and a system that actually works at machine speed.</p>
+      </div>
+    </div>
+
+    <div class="perms-toggles">
+      <div class="perm-row on">
+        <div class="perm-info">
+          <div class="perm-name">Film & Television</div>
+          <div class="perm-detail">Extras, background, crowd scenes, genre productions</div>
+        </div>
+        <div class="perm-earn">£60–£200</div>
+        <div class="perm-toggle on"></div>
+      </div>
+      <div class="perm-row on">
+        <div class="perm-info">
+          <div class="perm-name">Advertising & Brand</div>
+          <div class="perm-detail">Commercial campaigns, social media, product imagery</div>
+        </div>
+        <div class="perm-earn">£40–£300</div>
+        <div class="perm-toggle on"></div>
+      </div>
+      <div class="perm-row on">
+        <div class="perm-info">
+          <div class="perm-name">Gaming & Esports</div>
+          <div class="perm-detail">NPC characters, crowd skins, sports titles</div>
+        </div>
+        <div class="perm-earn">£50–£150</div>
+        <div class="perm-toggle on"></div>
+      </div>
+      <div class="perm-row on">
+        <div class="perm-info">
+          <div class="perm-name">D2C Products</div>
+          <div class="perm-detail">Personalized gifts, greeting cards, product integration</div>
+        </div>
+        <div class="perm-earn">£15–£80</div>
+        <div class="perm-toggle on"></div>
+      </div>
+      <div class="perm-row off">
+        <div class="perm-info">
+          <div class="perm-name">Political Content</div>
+          <div class="perm-detail">Any political advertising, campaign, or affiliation</div>
+        </div>
+        <div class="perm-earn">Blocked</div>
+        <div class="perm-toggle off"></div>
+      </div>
+      <div class="perm-row off">
+        <div class="perm-info">
+          <div class="perm-name">Adult Content</div>
+          <div class="perm-detail">Any content rated 18+ or of an adult nature</div>
+        </div>
+        <div class="perm-earn">Blocked</div>
+        <div class="perm-toggle off"></div>
+      </div>
+      <div class="perm-row on">
+        <div class="perm-info">
+          <div class="perm-name">Geography: UK &amp; EU Only</div>
+          <div class="perm-detail">License valid in United Kingdom and European Union markets</div>
+        </div>
+        <div class="perm-earn">Scoped</div>
+        <div class="perm-toggle on"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHAT YOU EARN ───────────────────────────── -->
+<section class="earnings-section">
+  <div class="sec-label">The Money</div>
+  <div class="sec-title">What Talent Earns</div>
+
+  <div class="earnings-grid">
+    <div class="earn-card">
+      <div class="earn-role">Extras & Background</div>
+      <div class="earn-title">Film & TV Background Role</div>
+      <div class="earn-example">"Beaten up in a Hong Kong fight scene." "Biblical marketplace crowd." "Dinosaur stampede survivor."</div>
+      <div class="earn-pay">
+        <span class="earn-amount">£80</span>
+        <span class="earn-per">per scene use</span>
+      </div>
+      <div class="earn-note">Each use of your likeness generates a new license event and a new payment. One shoot — unlimited productions.</div>
+    </div>
+    <div class="earn-card">
+      <div class="earn-role">Named Support Role</div>
+      <div class="earn-title">Auction &amp; Named Casting</div>
+      <div class="earn-example">"Fight JCVD in the opening sequence." "Play opposite the lead in a confrontation scene." "Appear as a named villain."</div>
+      <div class="earn-pay">
+        <span class="earn-amount">£400+</span>
+        <span class="earn-per">per role</span>
+      </div>
+      <div class="earn-note">Auction wins and named casting attract premium rates. A-list adjacent means A-list adjacent pay.</div>
+    </div>
+    <div class="earn-card">
+      <div class="earn-role">D2C & Commercial</div>
+      <div class="earn-title">Brand & Product Licensing</div>
+      <div class="earn-example">"Your face on a personalized birthday card sent to 50,000 people." "Brand campaign across 12 markets." "Product model for an e-commerce range."</div>
+      <div class="earn-pay">
+        <span class="earn-amount">£25</span>
+        <span class="earn-per">per product license</span>
+      </div>
+      <div class="earn-note">Volume is the model. Small per-unit fees across thousands of product licenses add up fast — and you see every one.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VOICES ──────────────────────────────────── -->
+<section class="voices-section">
+  <div class="sec-label">Talent Stories</div>
+  <div class="sec-title">Who's Already In</div>
+
+  <div class="voices-grid">
+    <div class="voice-card">
+      <p class="voice-quote">I signed up on a Tuesday. By Friday I had my first payment — a crowd scene in a war film. I've never been near a film set in my life. Now apparently I died at the Somme.</p>
+      <div class="voice-name">Marcus T.</div>
+      <div class="voice-role">Teacher · Liverpool</div>
+      <div class="voice-earn">£340 earned · 4 productions</div>
+    </div>
+    <div class="voice-card">
+      <p class="voice-quote">The key system is what sold me. I can literally see which studio has my face, in what film, for how long. I've got a spreadsheet going. I have been in more films than most people who go to actual auditions.</p>
+      <div class="voice-name">Priya R.</div>
+      <div class="voice-role">Marketing Manager · London</div>
+      <div class="voice-earn">£1,200 earned · 9 productions</div>
+    </div>
+    <div class="voice-card">
+      <p class="voice-quote">I blocked political content and adult content before I'd even finished registering. Knowing that's enforced at the system level — not just written on a form — that's the difference.</p>
+      <div class="voice-name">James K.</div>
+      <div class="voice-role">Retired · Edinburgh</div>
+      <div class="voice-earn">£620 earned · 6 productions</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SIGN UP ──────────────────────────────────── -->
+<section class="signup-section" id="signup">
+  <div class="sec-label">Registration</div>
+  <div class="sec-title">Your Casting Call Starts Here</div>
+
+  <div class="signup-steps">
+    <div class="signup-step">
+      <div class="step-bubble">01</div>
+      <div class="step-name">Create Your Profile</div>
+      <p class="step-desc">Name, location, and basic details. Takes two minutes.</p>
+    </div>
+    <div class="signup-step">
+      <div class="step-bubble">02</div>
+      <div class="step-name">Upload Your Likeness</div>
+      <p class="step-desc">Photos, video reference, voice sample. The more you upload, the more you can earn.</p>
+    </div>
+    <div class="signup-step">
+      <div class="step-bubble">03</div>
+      <div class="step-name">Set Your Permissions</div>
+      <p class="step-desc">Choose exactly what you allow. Your rules are enforced at the system level.</p>
+    </div>
+    <div class="signup-step">
+      <div class="step-bubble">04</div>
+      <div class="step-name">Receive Your Key</div>
+      <p class="step-desc">Your Talento Identity Key is issued. You're live in the registry. Studios can find you.</p>
+    </div>
+  </div>
+
+  <div class="signup-form-wrap">
+    <!-- Form -->
+    <div class="form-panel">
+      <div class="form-title">Register as Talent</div>
+      <div class="form-sub">Free to join. No gatekeepers. You control everything.</div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>First Name</label>
+          <input type="text" placeholder="Your first name">
+        </div>
+        <div class="form-field">
+          <label>Last Name</label>
+          <input type="text" placeholder="Your last name">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>Country</label>
+          <select>
+            <option>United Kingdom</option>
+            <option>United States</option>
+            <option>Germany</option>
+            <option>France</option>
+            <option>Australia</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Talent Type</label>
+          <select>
+            <option>Extras & Background</option>
+            <option>Named Support</option>
+            <option>Commercial & Brand</option>
+            <option>All Types</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="upload-zone">
+        <div class="upload-icon">📷</div>
+        <div class="upload-text">Upload Your Photos</div>
+        <div class="upload-sub">Drag and drop, or click to browse</div>
+        <div class="upload-types">JPG · PNG · MP4 · WAV · MP3</div>
+      </div>
+
+      <div class="form-field">
+        <label>Anything studios should know about you?</label>
+        <textarea placeholder="Unusual features, skills, languages, professional experience — all of it helps casting directors find you."></textarea>
+      </div>
+
+      <button class="submit-btn">Create My Profile & Get My Key →</button>
+      <p class="consent-note">By registering you agree to the <a href="#">Talento Talent Agreement</a> and <a href="#">Privacy Policy</a>. Your data is never sold. Your key is yours forever.</p>
+    </div>
+
+    <!-- Benefits -->
+    <div class="benefit-panel">
+      <h3>What Happens When You Register</h3>
+      <p>Registration is free. Always. Here's exactly what you get from the moment you hit submit.</p>
+
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <div class="benefit-check">✓</div>
+          <div class="benefit-text">
+            <div class="benefit-name">Your Talento Identity Key</div>
+            <div class="benefit-detail">Issued instantly. Permanent. <strong>Yours to keep regardless of platform changes.</strong> The credential that governs every use of your likeness.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">✓</div>
+          <div class="benefit-text">
+            <div class="benefit-name">Live in the Global Registry</div>
+            <div class="benefit-detail">Your profile goes live to <strong>320+ studio and brand partners</strong> the moment verification is complete. Casting starts finding you immediately.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">✓</div>
+          <div class="benefit-text">
+            <div class="benefit-name">Your Earnings Dashboard</div>
+            <div class="benefit-detail">Track every active license, every payment, every project key. <strong>Full transparency</strong> into who has your face and what they're paying for it.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">✓</div>
+          <div class="benefit-text">
+            <div class="benefit-name">Permission Controls — Live Immediately</div>
+            <div class="benefit-detail">Set once, enforced forever. <strong>No studio can override your permissions</strong> — they're built into the API that every buyer must call before generating your likeness.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-check">✓</div>
+          <div class="benefit-text">
+            <div class="benefit-name">Your Personal Referral Code</div>
+            <div class="benefit-detail">Bring another talent to Talento and <strong>earn a share of their platform earnings</strong> for 12 months. Your network earns for you too.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-callout">
+        <div class="key-callout-title">Your Key — Issued on Registration</div>
+        <div class="key-callout-key">
+          TL · AX93F · K28Q · 771
+          <span class="proj-suffix"> · PRJ — · STU —</span>
+        </div>
+        <div class="key-callout-desc">The project and studio codes are generated each time your likeness is licensed. You'll see every combination in your dashboard — a permanent, auditable record of every time your identity has been used.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA BANNER ──────────────────────────────── -->
+<div class="cta-banner">
+  <div class="cta-left">
+    <div class="cta-eyebrow">The World's Largest AI Casting Call</div>
+    <div class="cta-title">CASTING IS OPEN.<br>YOUR SCENE AWAITS.</div>
+  </div>
+  <button class="cta-btn" onclick="document.getElementById('signup').scrollIntoView({behavior:'smooth'})">Register Now — It's Free</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TALEN<span>T</span>O</div>
+  <ul class="footer-links">
+    <li><a href="#">For Studios</a></li>
+    <li><a href="#">How It Works</a></li>
+    <li><a href="#">Auctions</a></li>
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+  </ul>
+  <span class="footer-tag">Your Likeness. Protected. Paid.</span>
+</footer>
+
+<script>
+// Toggle permissions on click
+document.querySelectorAll('.perm-row').forEach(row => {
+  row.addEventListener('click', () => {
+    const toggle = row.querySelector('.perm-toggle');
+    const isOn = row.classList.contains('on');
+    row.classList.toggle('on', !isOn);
+    row.classList.toggle('off', isOn);
+    toggle.classList.toggle('on', !isOn);
+    toggle.classList.toggle('off', isOn);
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.genre-card, .protect-card, .earn-card, .voice-card, .benefit-item').forEach((el, i) => {
+  el.classList.add('reveal');
+  el.style.transitionDelay = (i % 4) * 0.08 + 's';
+  observer.observe(el);
+});
+
+// Upload zone interaction
+document.querySelector('.upload-zone').addEventListener('click', () => {
+  const zone = document.querySelector('.upload-zone');
+  zone.style.borderColor = 'var(--orange)';
+  zone.querySelector('.upload-text').textContent = 'Files Selected ✓';
+  zone.querySelector('.upload-icon').textContent = '✅';
+  setTimeout(() => {
+    zone.style.borderColor = '';
+  }, 2000);
+});
+
+// Animate key display with a typewriter feel on load
+const keyDisplay = document.querySelector('.key-display');
+if (keyDisplay) {
+  const chars = ['AX93F', 'BK71M', 'CR82P', 'DJ54Q', 'AX93F'];
+  let i = 0;
+  const idSeg = keyDisplay.querySelector('.seg-id');
+  setInterval(() => {
+    i = (i + 1) % chars.length;
+    if (idSeg) {
+      idSeg.style.opacity = '0.4';
+      setTimeout(() => {
+        if (idSeg) { idSeg.textContent = chars[i] + '·K28Q·771'; idSeg.style.opacity = '1'; }
+      }, 300);
+    }
+  }, 3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talento — AI Talent & Likeness Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #E8500A;
+    --orange-hot: #FF6020;
+    --orange-dim: #A33800;
+    --dark: #0D0D10;
+    --dark2: #13131A;
+    --dark3: #1C1C26;
+    --mid: #2A2A38;
+    --grey: #6B6B85;
+    --silver: #A0A0B8;
+    --white: #F4F2EE;
+    --cream: #EDE9E1;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── NOISE OVERLAY ────────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* ── NAV ──────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 72px;
+    background: linear-gradient(to bottom, rgba(13,13,16,0.98) 0%, rgba(13,13,16,0) 100%);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--orange); }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--silver);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-login {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .nav-login:hover { background: var(--orange-hot); }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(105deg, rgba(13,13,16,0.97) 0%, rgba(13,13,16,0.7) 42%, rgba(13,13,16,0.2) 70%, rgba(13,13,16,0.5) 100%),
+      linear-gradient(to top, rgba(13,13,16,1) 0%, rgba(13,13,16,0) 40%);
+    z-index: 1;
+  }
+
+  /* Fake cinematic figure — abstract silhouette using CSS */
+  .hero-figure {
+    position: absolute;
+    right: 6%;
+    bottom: 0;
+    width: 46%;
+    height: 95%;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 80% at 50% 60%, rgba(232,80,10,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 50% 40%, rgba(232,80,10,0.06) 0%, transparent 60%);
+    overflow: hidden;
+  }
+
+  /* Vertical scan lines on figure */
+  .hero-figure::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(0,0,0,0.08) 3px,
+      rgba(0,0,0,0.08) 4px
+    );
+  }
+
+  /* Abstract figure silhouette */
+  .hero-figure-shape {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+    height: 88%;
+    background: linear-gradient(
+      180deg,
+      rgba(100,80,60,0.0) 0%,
+      rgba(60,45,30,0.1) 20%,
+      rgba(40,30,20,0.25) 50%,
+      rgba(20,15,10,0.4) 75%,
+      rgba(10,8,5,0.6) 100%
+    );
+    clip-path: polygon(
+      35% 0%, 65% 0%,
+      72% 8%, 76% 18%, 74% 28%,
+      82% 32%, 88% 38%, 86% 46%, 80% 50%,
+      84% 55%, 82% 65%, 76% 70%,
+      78% 78%, 76% 88%, 72% 95%,
+      68% 100%, 32% 100%,
+      28% 95%, 24% 88%, 22% 78%,
+      24% 70%, 18% 65%, 16% 55%,
+      20% 50%, 14% 46%, 12% 38%, 18% 32%,
+      26% 28%, 24% 18%, 28% 8%
+    );
+    filter: blur(1px);
+  }
+
+  /* Flame / explosion effect behind figure */
+  .hero-flames {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(ellipse 30% 40% at 75% 80%, rgba(232,80,10,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 20% 30% at 85% 70%, rgba(255,140,20,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse 25% 35% at 65% 85%, rgba(200,50,5,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse 15% 20% at 90% 60%, rgba(255,180,40,0.1) 0%, transparent 40%);
+    animation: flicker 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes flicker {
+    0%   { opacity: 0.7; }
+    33%  { opacity: 1.0; }
+    66%  { opacity: 0.85; }
+    100% { opacity: 0.95; }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 48px 80px;
+    max-width: 680px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--orange);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,80,10,0.6); }
+    50%       { box-shadow: 0 0 0 6px rgba(232,80,10,0); }
+  }
+  .hero-badge span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 9vw, 120px);
+    line-height: 0.92;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+  .hero-headline .accent { color: var(--orange); }
+
+  .hero-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--silver);
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.55s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    padding: 16px 36px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.4s;
+  }
+  .btn-primary:hover { background: var(--orange-hot); transform: translateY(-1px); }
+  .btn-primary:hover::after { left: 100%; }
+
+  .btn-ghost {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(244,242,238,0.25);
+    padding: 16px 36px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.04); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll indicator */
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px;
+    right: 48px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .hero-scroll span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey);
+    writing-mode: vertical-lr;
+  }
+  .scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--orange), transparent);
+    animation: scrollDrop 2s ease-in-out infinite;
+  }
+  @keyframes scrollDrop {
+    0%   { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    50%  { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    51%  { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; opacity: 0.3; }
+  }
+
+  /* ── LIVE AUCTION TICKER ──────────────────────────── */
+  .auction-bar {
+    background: var(--orange);
+    padding: 0;
+    overflow: hidden;
+    height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .auction-bar-label {
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.25);
+    padding: 0 24px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .auction-bar-label span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: white;
+    animation: pulse 1.5s infinite;
+  }
+  .ticker-wrap {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+  .ticker-track {
+    display: flex;
+    animation: ticker 28s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 48px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.9);
+  }
+  .ticker-sep {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    flex-shrink: 0;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── FEATURED AUCTION ─────────────────────────────── */
+  .auction-section {
+    background: var(--dark2);
+    padding: 80px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .auction-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--orange), transparent);
+  }
+
+  .section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 64px);
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 48px;
+    line-height: 1;
+  }
+
+  .auction-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2px;
+  }
+
+  .auction-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3/4;
+    background: var(--dark3);
+    transition: transform 0.3s;
+  }
+  .auction-card:hover { transform: scale(1.01); z-index: 2; }
+
+  .auction-card.featured {
+    grid-column: span 2;
+    aspect-ratio: 16/10;
+  }
+
+  .card-bg {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Card backgrounds — cinematic gradients */
+  .card-1 .card-bg {
+    background:
+      linear-gradient(135deg, rgba(232,80,10,0.3) 0%, transparent 50%),
+      linear-gradient(to top, rgba(13,13,16,0.98) 0%, rgba(13,13,16,0.4) 60%, rgba(13,13,16,0.1) 100%),
+      radial-gradient(ellipse at 70% 30%, rgba(180,120,60,0.2) 0%, transparent 60%),
+      linear-gradient(160deg, #1a1008 0%, #0d0d10 100%);
+  }
+  .card-2 .card-bg {
+    background:
+      linear-gradient(to top, rgba(13,13,16,0.98) 0%, rgba(13,13,16,0.3) 70%, rgba(13,13,16,0.1) 100%),
+      radial-gradient(ellipse at 50% 40%, rgba(80,60,120,0.2) 0%, transparent 60%),
+      linear-gradient(160deg, #10101a 0%, #0d0d10 100%);
+  }
+  .card-3 .card-bg {
+    background:
+      linear-gradient(to top, rgba(13,13,16,0.98) 0%, rgba(13,13,16,0.3) 70%, rgba(13,13,16,0.1) 100%),
+      radial-gradient(ellipse at 50% 40%, rgba(60,120,80,0.15) 0%, transparent 60%),
+      linear-gradient(160deg, #0a1010 0%, #0d0d10 100%);
+  }
+
+  /* Abstract person shapes in cards */
+  .card-figure {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 55%;
+    height: 75%;
+    opacity: 0.25;
+  }
+  .card-figure svg { width: 100%; height: 100%; }
+
+  .card-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px 24px 24px;
+    background: linear-gradient(to top, rgba(13,13,16,0.98) 0%, rgba(13,13,16,0.6) 60%, transparent 100%);
+  }
+
+  .card-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .status-live {
+    background: var(--orange);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    color: white;
+  }
+  .status-upcoming {
+    background: var(--mid);
+    border: 1px solid var(--grey);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    color: var(--silver);
+  }
+
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(22px, 2.5vw, 36px);
+    letter-spacing: 1.5px;
+    color: var(--white);
+    line-height: 1.0;
+    margin-bottom: 6px;
+  }
+
+  .card-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: var(--silver);
+    margin-bottom: 16px;
+  }
+
+  .card-stats {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 2px; }
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .stat-value {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.5px;
+  }
+  .stat-value.orange { color: var(--orange); }
+
+  .countdown {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .count-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .count-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    line-height: 1;
+    color: var(--orange);
+    letter-spacing: 1px;
+  }
+  .count-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .count-sep {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--orange-dim);
+    margin-bottom: 10px;
+  }
+
+  .bid-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--orange);
+    color: white;
+    border: none;
+    padding: 11px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .bid-btn:hover { background: var(--orange-hot); transform: translateX(2px); }
+  .bid-btn .arrow { font-size: 16px; transition: transform 0.2s; }
+  .bid-btn:hover .arrow { transform: translateX(3px); }
+
+  /* ── THREE ENTRY POINTS ───────────────────────────── */
+  .entry-section {
+    background: var(--dark);
+    padding: 80px 48px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    position: relative;
+  }
+
+  .entry-card {
+    background: var(--dark3);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-top: 2px solid transparent;
+  }
+  .entry-card:hover { background: var(--mid); border-top-color: var(--orange); }
+
+  .entry-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(255,255,255,0.04);
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    letter-spacing: -2px;
+  }
+
+  .entry-icon {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: var(--orange);
+    font-size: 18px;
+  }
+
+  .entry-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1.5px;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1;
+  }
+
+  .entry-desc {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--silver);
+    margin-bottom: 24px;
+  }
+
+  .entry-link {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .entry-link::after { content: '→'; transition: transform 0.2s; }
+  .entry-card:hover .entry-link::after { transform: translateX(4px); }
+
+  /* ── HOW IT WORKS ─────────────────────────────────── */
+  .how-section {
+    background: var(--dark2);
+    padding: 100px 48px;
+    position: relative;
+  }
+  .how-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(232,80,10,0.3), transparent);
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 64px;
+    position: relative;
+  }
+
+  .how-grid::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 16.66%;
+    right: 16.66%;
+    height: 1px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-dim), var(--orange));
+    z-index: 0;
+  }
+
+  .how-step {
+    padding: 0 36px;
+    position: relative;
+    z-index: 1;
+  }
+  .how-step:first-child { padding-left: 0; }
+  .how-step:last-child  { padding-right: 0; }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border: 1px solid var(--orange);
+    background: var(--dark2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    color: var(--orange);
+    margin-bottom: 24px;
+  }
+
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .step-desc {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.65;
+    color: var(--silver);
+  }
+
+  /* ── TRUST BAR ────────────────────────────────────── */
+  .trust-bar {
+    background: var(--dark3);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    padding: 28px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .trust-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    flex: 1;
+  }
+  .trust-item:not(:last-child) {
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .trust-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 1px;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .trust-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  /* ── TALENT GRID PREVIEW ──────────────────────────── */
+  .talent-section {
+    background: var(--dark);
+    padding: 100px 48px;
+  }
+
+  .talent-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+  }
+
+  .talent-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 2px;
+  }
+
+  .talent-card {
+    position: relative;
+    aspect-ratio: 2/3;
+    background: var(--dark3);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+  .talent-card:hover { transform: scale(1.03); z-index: 2; }
+
+  .talent-face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* Each talent card gets a unique gradient portrait */
+  .talent-card:nth-child(1) .talent-face { background: linear-gradient(180deg, rgba(180,140,100,0.15) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(200,160,120,0.2) 0%, transparent 55%), #111118; }
+  .talent-card:nth-child(2) .talent-face { background: linear-gradient(180deg, rgba(100,140,180,0.1) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(120,160,200,0.15) 0%, transparent 55%), #0f1218; }
+  .talent-card:nth-child(3) .talent-face { background: linear-gradient(180deg, rgba(200,160,100,0.18) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 30%, rgba(220,180,120,0.2) 0%, transparent 55%), #131008; }
+  .talent-card:nth-child(4) .talent-face { background: linear-gradient(180deg, rgba(140,100,180,0.12) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(160,120,200,0.15) 0%, transparent 55%), #100d16; }
+  .talent-card:nth-child(5) .talent-face { background: linear-gradient(180deg, rgba(100,180,140,0.1) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 30%, rgba(120,200,160,0.12) 0%, transparent 55%), #0d1210; }
+  .talent-card:nth-child(6) .talent-face { background: linear-gradient(180deg, rgba(232,80,10,0.12) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(232,100,20,0.15) 0%, transparent 55%), #130d08; }
+
+  /* Abstract face shape per card */
+  .face-shape {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 52%;
+    padding-bottom: 65%;
+    border-radius: 50% 50% 44% 44%;
+    background: rgba(255,255,255,0.07);
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.3);
+  }
+
+  .talent-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px;
+    background: linear-gradient(to top, rgba(13,13,16,0.98) 0%, transparent 100%);
+  }
+  .talent-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+  .talent-type {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 2px;
+  }
+  .talent-verified {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    background: var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+
+  /* ── FOOTER ───────────────────────────────────────── */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 64px 48px 40px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 64px;
+  }
+
+  .footer-brand .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 3px;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+  .footer-brand .logo span { color: var(--orange); }
+
+  .footer-brand p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--grey);
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col a {
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--silver);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col a:hover { color: var(--white); }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-bottom p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    color: var(--grey);
+  }
+  .footer-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+  }
+
+  /* ── UTILITIES ────────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border: 1px solid rgba(232,80,10,0.4);
+    color: var(--orange);
+    margin-right: 6px;
+    margin-bottom: 6px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">TALEN<span>T</span>O</a>
+  <ul class="nav-links">
+    <li><a href="#">Become Talent</a></li>
+    <li><a href="#">For Studios</a></li>
+    <li><a href="#">Auctions</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <button class="nav-login">Login</button>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-flames"></div>
+  <div class="hero-figure">
+    <div class="hero-figure-shape"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Live Auction Now Open</span>
+    </div>
+    <div class="hero-eyebrow">Act With JCVD</div>
+    <h1 class="hero-headline">
+      FIGHT<br>
+      <span class="accent">JEAN-CLAUDE</span><br>
+      VAN DAMME
+    </h1>
+    <p class="hero-sub">Join the action. Appear in an upcoming AI film.</p>
+    <div class="hero-ctas">
+      <button class="btn-primary">Join the Auction</button>
+      <button class="btn-ghost">Browse Talent</button>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ── AUCTION TICKER ─────────────────────────────── -->
+<div class="auction-bar">
+  <div class="auction-bar-label">
+    <div class="live-dot"></div>
+    <span>Live</span>
+  </div>
+  <div class="ticker-wrap">
+    <div class="ticker-track">
+      <div class="ticker-item">Fight With JCVD <span class="ticker-sep"></span> Current Bid: £4,200 <span class="ticker-sep"></span> 47 Bidders</div>
+      <div class="ticker-item">Romance Scene — Upcoming Drama <span class="ticker-sep"></span> Opens Friday <span class="ticker-sep"></span> Reserve: £800</div>
+      <div class="ticker-item">Crowd Scene — Sci-Fi Epic <span class="ticker-sep"></span> 200 Spots Available <span class="ticker-sep"></span> From £50</div>
+      <div class="ticker-item">Action Sequence — Unnamed Thriller <span class="ticker-sep"></span> Bidding Closes: 22hrs <span class="ticker-sep"></span> 12 Bidders</div>
+      <div class="ticker-item">Fight With JCVD <span class="ticker-sep"></span> Current Bid: £4,200 <span class="ticker-sep"></span> 47 Bidders</div>
+      <div class="ticker-item">Romance Scene — Upcoming Drama <span class="ticker-sep"></span> Opens Friday <span class="ticker-sep"></span> Reserve: £800</div>
+      <div class="ticker-item">Crowd Scene — Sci-Fi Epic <span class="ticker-sep"></span> 200 Spots Available <span class="ticker-sep"></span> From £50</div>
+      <div class="ticker-item">Action Sequence — Unnamed Thriller <span class="ticker-sep"></span> Bidding Closes: 22hrs <span class="ticker-sep"></span> 12 Bidders</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FEATURED AUCTIONS ───────────────────────────── -->
+<section class="auction-section">
+  <div class="section-label">Live &amp; Upcoming</div>
+  <div class="section-title">Open Auctions</div>
+
+  <div class="auction-grid">
+
+    <!-- Featured card -->
+    <div class="auction-card featured card-1">
+      <div class="card-bg"></div>
+      <div class="card-overlay">
+        <div class="card-status">
+          <span class="status-live">● Live</span>
+        </div>
+        <div class="card-title">Act With JCVD — Fight Scene</div>
+        <div class="card-sub">Untitled Action Feature · AI Production · Global Release</div>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-label">Current Bid</span>
+            <span class="stat-value orange">£4,200</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Bidders</span>
+            <span class="stat-value">47</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Closes In</span>
+            <div class="countdown">
+              <div class="count-unit"><span class="count-num" id="hrs">21</span><span class="count-label">hrs</span></div>
+              <span class="count-sep">:</span>
+              <div class="count-unit"><span class="count-num" id="mins">44</span><span class="count-label">min</span></div>
+              <span class="count-sep">:</span>
+              <div class="count-unit"><span class="count-num" id="secs">08</span><span class="count-label">sec</span></div>
+            </div>
+          </div>
+        </div>
+        <button class="bid-btn">Place Bid <span class="arrow">→</span></button>
+      </div>
+    </div>
+
+    <!-- Upcoming card 1 -->
+    <div class="auction-card card-2">
+      <div class="card-bg"></div>
+      <div class="card-figure">
+        <svg viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="50" cy="35" rx="22" ry="26" fill="rgba(255,255,255,0.06)"/>
+          <path d="M20 140 Q18 90 50 80 Q82 90 80 140Z" fill="rgba(255,255,255,0.05)"/>
+        </svg>
+      </div>
+      <div class="card-overlay">
+        <div class="card-status">
+          <span class="status-upcoming">Opens Friday</span>
+        </div>
+        <div class="card-title">Romance Lead — Period Drama</div>
+        <div class="card-sub">Historical Feature · 1920s Setting</div>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-label">Reserve</span>
+            <span class="stat-value">£800</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Watching</span>
+            <span class="stat-value">218</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming card 2 -->
+    <div class="auction-card card-3" style="display:none"><!-- hidden for 3-col layout --></div>
+
+  </div>
+</section>
+
+<!-- ── THREE ENTRY POINTS ──────────────────────────── -->
+<section class="entry-section">
+
+  <div class="entry-card">
+    <div class="entry-num">01</div>
+    <div class="entry-icon">↑</div>
+    <div class="entry-title">Become Talent</div>
+    <p class="entry-desc">Upload your likeness. Set exactly what you will and won't allow. Earn passively every time AI uses your face, voice, or body — with full visibility of who, when, and where.</p>
+    <a href="#" class="entry-link">Get Started</a>
+  </div>
+
+  <div class="entry-card">
+    <div class="entry-num">02</div>
+    <div class="entry-icon">◎</div>
+    <div class="entry-title">Browse Talent</div>
+    <p class="entry-desc">Search thousands of consented, verified identities. License instantly for film, advertising, gaming, or D2C. Every transaction is authorized, auditable, and legally complete.</p>
+    <a href="#" class="entry-link">Browse Now</a>
+  </div>
+
+  <div class="entry-card">
+    <div class="entry-num">03</div>
+    <div class="entry-icon">⬡</div>
+    <div class="entry-title">For Studios</div>
+    <p class="entry-desc">Enterprise casting, API access, compliance dashboards, and full audit infrastructure. The system that makes AI-generated talent legally scalable at studio speed.</p>
+    <a href="#" class="entry-link">Learn More</a>
+  </div>
+
+</section>
+
+<!-- ── TRUST BAR ───────────────────────────────────── -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <span class="trust-num">48K+</span>
+    <span class="trust-label">Registered Talent</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">320+</span>
+    <span class="trust-label">Studio Partners</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">1.2M</span>
+    <span class="trust-label">Licenses Issued</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">£4.8M</span>
+    <span class="trust-label">Paid to Talent</span>
+  </div>
+  <div class="trust-item">
+    <span class="trust-num">190+</span>
+    <span class="trust-label">Countries</span>
+  </div>
+</div>
+
+<!-- ── HOW IT WORKS ────────────────────────────────── -->
+<section class="how-section">
+  <div class="section-label">The Process</div>
+  <div class="section-title">AI Casting Made Simple</div>
+
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Upload & License Your Likeness</div>
+      <p class="step-desc">Register, upload your photo, video, and voice. Set your permissions — what you allow, what you don't. Receive your unique Talento Identity Key. You're in control.</p>
+    </div>
+    <div class="how-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Studios Hire AI Talent Legally</div>
+      <p class="step-desc">Studios, brands, and developers search, cast, and license through a single system. Every transaction is authorized, scoped, and permanently recorded. No legal grey areas.</p>
+    </div>
+    <div class="how-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Earn & Get Paid Fast</div>
+      <p class="step-desc">Instant payment on license completion. Full audit trail in your dashboard. See exactly who used your likeness, for what, and when. Your identity. Your revenue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TALENT GRID ─────────────────────────────────── -->
+<section class="talent-section">
+  <div class="talent-header">
+    <div>
+      <div class="section-label">The Registry</div>
+      <div class="section-title">Browse Talent</div>
+    </div>
+    <div>
+      <span class="tag">Film</span>
+      <span class="tag">Advertising</span>
+      <span class="tag">Gaming</span>
+      <span class="tag">D2C</span>
+      <span class="tag">Sports</span>
+    </div>
+  </div>
+
+  <div class="talent-grid">
+    <div class="talent-card">
+      <div class="talent-face">
+        <div class="face-shape"></div>
+      </div>
+      <div class="talent-verified">✓</div>
+      <div class="talent-info">
+        <div class="talent-name">Sarah M.</div>
+        <div class="talent-type">Film · Advertising</div>
+      </div>
+    </div>
+    <div class="talent-card">
+      <div class="talent-face">
+        <div class="face-shape"></div>
+      </div>
+      <div class="talent-verified">✓</div>
+      <div class="talent-info">
+        <div class="talent-name">James K.</div>
+        <div class="talent-type">Action · Gaming</div>
+      </div>
+    </div>
+    <div class="talent-card">
+      <div class="talent-face">
+        <div class="face-shape"></div>
+      </div>
+      <div class="talent-verified">✓</div>
+      <div class="talent-info">
+        <div class="talent-name">Priya R.</div>
+        <div class="talent-type">D2C · Advertising</div>
+      </div>
+    </div>
+    <div class="talent-card">
+      <div class="talent-face">
+        <div class="face-shape"></div>
+      </div>
+      <div class="talent-verified">✓</div>
+      <div class="talent-info">
+        <div class="talent-name">Marcus T.</div>
+        <div class="talent-type">Sports · Film</div>
+      </div>
+    </div>
+    <div class="talent-card">
+      <div class="talent-face">
+        <div class="face-shape"></div>
+      </div>
+      <div class="talent-verified">✓</div>
+      <div class="talent-info">
+        <div class="talent-name">Aiko N.</div>
+        <div class="talent-type">Gaming · D2C</div>
+      </div>
+    </div>
+    <div class="talent-card" style="background: var(--dark3); display:flex; align-items:center; justify-content:center; cursor:pointer;">
+      <div style="text-align:center; padding:24px;">
+        <div style="font-family:'Bebas Neue',sans-serif; font-size:42px; color:var(--orange); line-height:1;">48K+</div>
+        <div style="font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:600; letter-spacing:2.5px; text-transform:uppercase; color:var(--grey); margin:8px 0 20px;">Talents Available</div>
+        <a href="#" class="entry-link" style="justify-content:center;">Browse All →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">TALEN<span>T</span>O</div>
+      <p>The world's first consent-based AI talent and likeness marketplace. Your face. Your voice. Your rules. Your revenue.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Talent</h4>
+      <ul>
+        <li><a href="#">Become Talent</a></li>
+        <li><a href="#">Extras Registry</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">How Payments Work</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Studios</h4>
+      <ul>
+        <li><a href="#">Browse Registry</a></li>
+        <li><a href="#">API Access</a></li>
+        <li><a href="#">Compliance</a></li>
+        <li><a href="#">Enterprise</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Talento</a></li>
+        <li><a href="#">The Authorization System</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Talento. All rights reserved. Consent-based. Fully auditable.</p>
+    <span class="footer-tagline">Your likeness. Authorized. Protected. Yours.</span>
+  </div>
+</footer>
+
+<script>
+  // ── Live countdown ────────────────────────────────────
+  let total = (21 * 3600) + (44 * 60) + 8;
+  setInterval(() => {
+    if (total <= 0) return;
+    total--;
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    document.getElementById('hrs').textContent  = String(h).padStart(2,'0');
+    document.getElementById('mins').textContent = String(m).padStart(2,'0');
+    document.getElementById('secs').textContent = String(s).padStart(2,'0');
+  }, 1000);
+
+  // ── Bid animation ─────────────────────────────────────
+  const bidVal = document.querySelector('.stat-value.orange');
+  let bid = 4200;
+  setInterval(() => {
+    if (Math.random() > 0.85) {
+      bid += Math.floor(Math.random() * 150) + 50;
+      bidVal.style.transform = 'scale(1.15)';
+      bidVal.style.color = '#FF6020';
+      bidVal.textContent = '£' + bid.toLocaleString();
+      setTimeout(() => {
+        bidVal.style.transform = 'scale(1)';
+        bidVal.style.color = 'var(--orange)';
+      }, 400);
+    }
+  }, 4000);
+
+  // ── Stagger fade-in on scroll ─────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '0';
+        e.target.style.transform = 'translateY(20px)';
+        e.target.style.transition = `opacity 0.6s ${i * 0.1}s, transform 0.6s ${i * 0.1}s`;
+        requestAnimationFrame(() => {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        });
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.entry-card, .how-step, .auction-card, .talent-card').forEach(el => {
+    el.style.opacity = '0';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
