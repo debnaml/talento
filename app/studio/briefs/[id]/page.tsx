@@ -12,7 +12,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 const STATUS_COLORS: Record<string, string> = {
   draft: "text-grey border-grey/30",
-  open: "text-green-400 border-green-500/30",
+  open: "text-success border-success/30",
   closed: "text-silver border-white/10",
   cancelled: "text-grey border-white/10",
 };
@@ -232,7 +232,7 @@ export default async function BriefDetailPage({
                       <span
                         className={`absolute top-2 left-2 font-condensed text-[9px] font-bold uppercase tracking-[1.5px] px-2 py-0.5 ${
                           state === "accepted"
-                            ? "bg-green-500/80 text-white"
+                            ? "bg-success/80 text-white"
                             : state === "declined"
                             ? "bg-grey/80 text-white"
                             : "bg-orange/80 text-white"

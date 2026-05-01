@@ -6,7 +6,7 @@ type Tab = "all" | "draft" | "open" | "closed";
 
 const STATUS_COLORS: Record<string, string> = {
   draft: "text-grey border-grey/30",
-  open: "text-green-400 border-green-500/30",
+  open: "text-success border-success/30",
   closed: "text-silver border-white/10",
   cancelled: "text-grey border-white/10",
 };

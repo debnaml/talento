@@ -329,8 +329,8 @@ export function BriefForm({ mode, initial, action }: Props) {
       )}
 
       {savedFlash && (
-        <div className="bg-green-500/10 border border-green-500/30 px-4 py-3 mb-5">
-          <p className="font-condensed text-[12px] text-green-400">Brief updated.</p>
+        <div className="bg-success/10 border border-success/30 px-4 py-3 mb-5">
+          <p className="font-condensed text-[12px] text-success">Brief updated.</p>
         </div>
       )}
 

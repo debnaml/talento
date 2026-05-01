@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 
 const STATUS_COLORS: Record<string, string> = {
   pending: "text-orange border-orange/30",
-  accepted: "text-green-400 border-green-500/30",
+  accepted: "text-success border-success/30",
   declined: "text-grey border-white/10",
 };
 

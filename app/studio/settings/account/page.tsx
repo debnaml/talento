@@ -14,12 +14,6 @@ export default async function StudioSettingsAccountPage() {
     <div className="min-h-screen bg-dark px-4 py-16">
       <div className="max-w-[560px] mx-auto">
         <div className="mb-10">
-          <Link
-            href="/studio/dashboard"
-            className="inline-flex items-center gap-1.5 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-grey hover:text-orange transition-colors no-underline mb-4"
-          >
-            ← Dashboard
-          </Link>
           <div className="inline-flex items-center gap-2.5 mb-3">
             <div className="w-6 h-0.5 bg-orange" />
             <span className="font-condensed text-[11px] font-bold uppercase tracking-[4px] text-orange">

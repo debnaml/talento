@@ -108,29 +108,20 @@ export default async function TalentProfilePage({
 
   return (
     <div className="min-h-screen bg-dark">
+      {/* Back link */}
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 pt-8">
+        <Link
+          href="/studio/browse"
+          className="font-condensed text-[11px] font-bold uppercase tracking-[2px] text-grey hover:text-orange transition-colors no-underline"
+        >
+          ← Back to Registry
+        </Link>
+      </div>
+
       {/* Hero */}
-      <div className="relative bg-dark-2 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/60 to-transparent z-10" />
-
-        {primaryImage?.signedUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={primaryImage.signedUrl}
-            alt={talent.stage_name}
-            className="absolute right-0 top-0 h-full w-1/2 object-cover object-top"
-          />
-        )}
-
-        <div className="relative z-20 px-6 md:px-12 py-16 max-w-[580px]">
-          <div className="mb-4">
-            <Link
-              href="/studio/browse"
-              className="font-condensed text-[11px] font-bold uppercase tracking-[2px] text-grey hover:text-orange transition-colors no-underline"
-            >
-              ← Back to Registry
-            </Link>
-          </div>
-
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-10 grid grid-cols-1 md:grid-cols-[1fr_minmax(320px,440px)] gap-8 md:gap-12 items-start">
+        {/* Left — info */}
+        <div className="order-2 md:order-1">
           <div className="inline-flex items-center gap-2.5 mb-4">
             <div className="w-6 h-0.5 bg-orange" />
             <span className="font-condensed text-[11px] font-bold uppercase tracking-[4px] text-orange">
@@ -138,7 +129,7 @@ export default async function TalentProfilePage({
             </span>
           </div>
 
-          <h1 className="font-display text-[clamp(48px,6vw,88px)] tracking-[2px] text-warm-white leading-none mb-3">
+          <h1 className="font-display text-[clamp(48px,6vw,80px)] tracking-[2px] text-warm-white leading-none mb-3">
             {talent.stage_name.toUpperCase()}
           </h1>
 
@@ -149,7 +140,7 @@ export default async function TalentProfilePage({
           )}
 
           {talent.categories && talent.categories.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mb-6">
+            <div className="flex flex-wrap gap-1.5 mb-5">
               {(talent.categories as string[]).map((cat) => (
                 <span
                   key={cat}
@@ -203,10 +194,28 @@ export default async function TalentProfilePage({
             </form>
           </div>
         </div>
+
+        {/* Right — primary image */}
+        <div className="order-1 md:order-2">
+          <div className="aspect-[3/4] bg-dark-2 overflow-hidden relative">
+            {primaryImage?.signedUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={primaryImage.signedUrl}
+                alt={talent.stage_name}
+                className="w-full h-full object-cover object-center"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center font-condensed text-[11px] uppercase tracking-[2px] text-grey">
+                No photo
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Body */}
-      <div className="px-6 md:px-12 py-12 grid grid-cols-1 md:grid-cols-3 gap-0.5 max-w-[1200px]">
+      <div className="max-w-[1200px] mx-auto px-6 md:px-12 pb-16 grid grid-cols-1 md:grid-cols-3 gap-0.5">
         {/* Left col — bio + consent */}
         <div className="col-span-2 flex flex-col gap-0.5">
           {talent.bio && (
@@ -226,18 +235,18 @@ export default async function TalentProfilePage({
               <div className="font-condensed text-[10px] font-bold uppercase tracking-[3px] text-orange mb-4">
                 Gallery
               </div>
-              <div className="flex gap-0.5 flex-wrap">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-0.5">
                 {galleryImages.map((img) => (
                   <div
                     key={img.id}
-                    className="w-[calc(33%-2px)] aspect-[2/3] bg-dark-2 overflow-hidden"
+                    className="aspect-[3/4] bg-dark-2 overflow-hidden"
                   >
                     {img.signedUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={img.signedUrl}
                         alt=""
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-center"
                       />
                     )}
                   </div>
@@ -329,7 +338,7 @@ export default async function TalentProfilePage({
                     </span>
                     <span
                       className={`font-condensed text-[10px] font-bold uppercase tracking-[1px] ${
-                        allowed ? "text-green-400" : "text-grey"
+                        allowed ? "text-success" : "text-grey"
                       }`}
                     >
                       {allowed ? "✓ Yes" : "✗ No"}

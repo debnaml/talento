@@ -88,18 +88,7 @@ export default async function StudioDashboardPage() {
             <p className="font-condensed text-[12px] tracking-[1.5px] text-grey mt-1.5">
               {STUDIO_TYPE_LABELS[studio.studio_type] ?? studio.studio_type}
             </p>
-            <Link
-              href="/studio/settings/profile"
-              className="inline-flex mt-3 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-silver hover:text-orange transition-colors no-underline"
-            >
-              Edit Studio Profile →
-            </Link>
-            <Link
-              href="/studio/settings/account"
-              className="inline-flex mt-3 ml-5 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-silver hover:text-orange transition-colors no-underline"
-            >
-              Account →
-            </Link>
+
           </div>
           <div className="flex flex-col items-end gap-2">
             <Link

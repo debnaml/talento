@@ -91,9 +91,9 @@ export default async function TalentDashboardPage() {
 
           {talent.published ? (
             <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-2 bg-dark-3 border border-green-500/30 px-4 py-2">
-                <div className="w-2 h-2 rounded-full bg-green-400" />
-                <span className="font-condensed text-[11px] font-bold uppercase tracking-[2px] text-green-400">
+              <div className="flex items-center gap-2 bg-dark-3 border border-success/30 px-4 py-2">
+                <div className="w-2 h-2 rounded-full bg-success" />
+                <span className="font-condensed text-[11px] font-bold uppercase tracking-[2px] text-success">
                   Published
                 </span>
               </div>
@@ -166,18 +166,6 @@ export default async function TalentDashboardPage() {
             >
               Edit Profile →
             </Link>
-            <Link
-              href="/talent/settings/account"
-              className="ml-5 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-silver hover:text-orange transition-colors no-underline inline-flex items-center gap-2"
-            >
-              Account →
-            </Link>
-            <Link
-              href="/talent/invites"
-              className="ml-5 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-silver hover:text-orange transition-colors no-underline inline-flex items-center gap-2"
-            >
-              Invites →
-            </Link>
           </div>
 
           {/* Profile Strength tile */}
@@ -215,7 +203,7 @@ export default async function TalentDashboardPage() {
                   </span>
                   <span
                     className={`font-condensed text-[11px] font-bold uppercase tracking-[1px] ${
-                      s.done ? "text-green-400" : "text-grey"
+                      s.done ? "text-success" : "text-grey"
                     }`}
                   >
                     {s.done ? "✓ Added" : "Missing"}

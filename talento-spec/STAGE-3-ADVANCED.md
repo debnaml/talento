@@ -9,6 +9,7 @@ This doc is a design sketch, not an implementation spec. When any of these featu
 ## What's in Stage 3
 
 From the brief:
+
 1. **Talento Identity Key (TIK)** — cryptographically generated identifier per talent
 2. **Supplier Code** — per-buyer suffix
 3. **Single-Use License Tokens** — one per discrete licensed use, signed, expiring
@@ -40,6 +41,7 @@ If the answer to any is yes, read on.
 **Format:** `TL-KX72F-P49R-883` (per the brief: prefix + 3 grouped alphanumeric chunks)
 
 **Properties the brief implies:**
+
 - Unique per person
 - Permanent (can't be revoked)
 - Cryptographically tied to the talent's identity
@@ -73,6 +75,7 @@ export function signTikPayload(tik: string, payload: object): string {
 **When issued:** on `talent_profiles.published = true` transition (server action), or on first onboarding completion — either works. Must be unique; retry on collision (DB unique constraint catches it).
 
 **Important caveat:** "cryptographically generated" in the brief is marketing language; what actually matters is:
+
 - Uniqueness (Postgres unique index + random alphabet)
 - Unforgeability of downstream tokens that reference the TIK (HMAC)
 - Server-only knowledge of the signing secret
@@ -118,6 +121,7 @@ update public.studio_profiles
 ### Verification flow
 
 External buyer calls `POST /api/v1/verify` with the token. Server:
+
 1. Decodes token
 2. Looks up the row by `token_id`
 3. Recomputes the signature — if mismatch, return 401
@@ -167,10 +171,14 @@ export interface VerificationBackend {
 }
 
 // Today:
-class TalentoInternalBackend implements VerificationBackend { /* ... */ }
+class TalentoInternalBackend implements VerificationBackend {
+  /* ... */
+}
 
 // Tomorrow (if and when a standard emerges):
-class ExternalAuthorityBackend implements VerificationBackend { /* ... */ }
+class ExternalAuthorityBackend implements VerificationBackend {
+  /* ... */
+}
 
 export const gateway: VerificationBackend =
   process.env.VERIFICATION_BACKEND === "external"
@@ -187,6 +195,7 @@ That's it. The "gateway" is one interface, one env flag, two implementations (on
 The `audit_logs` table already exists in the Stage 1 schema. In Stage 3 it fills up.
 
 **Immutability:** Postgres doesn't do immutable tables natively. Options:
+
 1. **Good enough:** revoke UPDATE and DELETE privileges on the table for everyone. Only inserts. Service role can technically still break it, but it's operationally disciplined.
 2. **Better:** append-only via a trigger that rejects updates/deletes.
 3. **Paranoid:** daily snapshot hash published to a public write-once location (S3 with object lock, or notarise to a timestamping service). Over-engineered for Talento's scale.
@@ -220,6 +229,7 @@ revoke insert, update, delete on public.audit_logs from anon, authenticated;
 Each talent gets a referral code on signup: `TL-REF-{username}-{hash}`. Stored on `talent_profiles.referral_code`.
 
 When someone signs up via `?ref=TL-REF-...`:
+
 - On their profile row, store `referred_by_id`
 - For the first 12 months of the new talent's earnings, `referred_by_id` gets X% of platform commission
 
@@ -230,6 +240,7 @@ This is pure accounting logic, no infrastructure challenge. Defer until there ar
 ## H. Payments (Stripe Connect)
 
 For platform payouts to talent:
+
 - Stripe Connect Express accounts per talent
 - Studio pays platform → platform takes commission → remainder to talent's Connect account
 - Scheduled daily payouts
@@ -251,6 +262,7 @@ Build as a subdomain or `/partners/*` route tree. Uses the same `studio_profiles
 The brief frames Talento owning the identity layer as a moat. That moat is real but expensive.
 
 Before committing to building A–E above, seriously consider:
+
 - **SAG-AFTRA's AI provisions** — there may be emerging industry standards that supersede a proprietary TIK
 - **C2PA (Content Credentials) / coalition for content provenance** — already has cryptographic provenance for media, could be repurposed for likeness authorization
 - **Ethereum/Solana decentralised ID standards** — overkill but exist
@@ -281,4 +293,3 @@ Cheap, obvious polish items that don't justify their own stage. Pick off wheneve
 - **Moderation dashboard** — view reports, suspend accounts, audit blocks/unblocks.
 - **Notification digest email** — one daily summary for users who chose that cadence.
 - **Export my data / delete my account** — GDPR-compliant data dump + cascade delete flow.
-

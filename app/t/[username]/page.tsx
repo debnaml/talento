@@ -310,7 +310,7 @@ export default async function PublicTalentPage({
                     </span>
                     <span
                       className={`font-condensed text-[10px] font-bold uppercase tracking-[1px] ${
-                        allowed ? "text-green-400" : "text-grey"
+                        allowed ? "text-success" : "text-grey"
                       }`}
                     >
                       {allowed ? "✓ Yes" : "✗ No"}

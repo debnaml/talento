@@ -115,7 +115,7 @@ export function AccountSettingsForm({ currentEmail, role }: Props) {
           {emailMsg && (
             <p
               className={`font-condensed text-[11px] mt-2 ${
-                emailMsg.kind === "ok" ? "text-green-400" : "text-orange"
+                emailMsg.kind === "ok" ? "text-success" : "text-orange"
               }`}
             >
               {emailMsg.text}
@@ -164,7 +164,7 @@ export function AccountSettingsForm({ currentEmail, role }: Props) {
           {pwMsg && (
             <p
               className={`font-condensed text-[11px] mt-3 ${
-                pwMsg.kind === "ok" ? "text-green-400" : "text-orange"
+                pwMsg.kind === "ok" ? "text-success" : "text-orange"
               }`}
             >
               {pwMsg.text}

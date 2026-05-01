@@ -511,6 +511,7 @@ export type Database = {
           country: string | null
           created_at: string | null
           ethnicity: string | null
+          featured_on_homepage: boolean
           gender: Database["public"]["Enums"]["gender_identity"] | null
           height_cm: number | null
           id: string
@@ -535,6 +536,7 @@ export type Database = {
           country?: string | null
           created_at?: string | null
           ethnicity?: string | null
+          featured_on_homepage?: boolean
           gender?: Database["public"]["Enums"]["gender_identity"] | null
           height_cm?: number | null
           id: string

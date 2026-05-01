@@ -177,7 +177,7 @@ export default function ForStudiosPage() {
           className="relative z-[2] px-6 md:px-12 py-20 flex flex-col justify-center gap-0.5"
           style={{ opacity: 0, animation: "fadeUp 0.8s 0.3s forwards" }}
         >
-          <div className="font-condensed text-[10px] font-bold uppercase tracking-[3px] text-red-400/80 pb-3.5 mb-0.5">
+          <div className="font-condensed text-[10px] font-bold uppercase tracking-[3px] text-danger/80 pb-3.5 mb-0.5">
             ⚠ The Old Way
           </div>
           <div
@@ -212,7 +212,7 @@ export default function ForStudiosPage() {
             <div className="flex-1 h-px bg-white/[0.06]" />
           </div>
 
-          <div className="font-condensed text-[10px] font-bold uppercase tracking-[3px] text-green-400/80 pb-3.5">
+          <div className="font-condensed text-[10px] font-bold uppercase tracking-[3px] text-success/80 pb-3.5">
             ✓ The Talento Way
           </div>
           <div
@@ -414,8 +414,8 @@ export default function ForStudiosPage() {
                 ))}
               </div>
               {[
-                { name: "Sarah M.",  code: "TL·AX93F·PRJ042", prod: "Hong Kong Action · BG",  exp: "14 Mar 2025", status: "Active",  statusClass: "bg-green-900/20 text-green-400" },
-                { name: "James K.",  code: "TL·BK71M·PRJ042", prod: "Hong Kong Action · BG",  exp: "14 Mar 2025", status: "Active",  statusClass: "bg-green-900/20 text-green-400" },
+                { name: "Sarah M.",  code: "TL·AX93F·PRJ042", prod: "Hong Kong Action · BG",  exp: "14 Mar 2025", status: "Active",  statusClass: "bg-success/20 text-success" },
+                { name: "James K.",  code: "TL·BK71M·PRJ042", prod: "Hong Kong Action · BG",  exp: "14 Mar 2025", status: "Active",  statusClass: "bg-success/20 text-success" },
                 { name: "Priya R.",  code: "TL·CR82P·PRJ019", prod: "Brand Campaign · Q1",    exp: "Awaiting",    status: "Pending", statusClass: "bg-orange/10 text-orange" },
                 { name: "Marcus T.", code: "TL·DJ54Q·PRJ003", prod: "Biblical Epic · Crowd",  exp: "01 Jan 2025", status: "Expired", statusClass: "bg-white/[0.04] text-grey" },
               ].map((row) => (
@@ -537,7 +537,7 @@ export default function ForStudiosPage() {
               ].map((s) => (
                 <div
                   key={s.num}
-                  className="px-5 py-5 border-l-2 transition-all cursor-default hover:border-l-green-400/60 hover:bg-green-900/[0.07]"
+                  className="px-5 py-5 border-l-2 transition-all cursor-default hover:border-l-success/60 hover:bg-success/[0.07]"
                   style={{ background: "rgba(40,160,80,0.04)", borderLeftColor: "rgba(40,160,80,0.2)" }}
                 >
                   <div className="font-display text-[12px] tracking-[2px] mb-1.5" style={{ color: "rgba(40,160,80,0.6)" }}>

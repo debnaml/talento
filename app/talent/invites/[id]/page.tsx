@@ -151,7 +151,7 @@ export default async function InviteDetailPage({
               <span
                 className={`font-condensed text-[11px] font-bold uppercase tracking-[2px] px-3 py-1 border ${
                   invite.status === "accepted"
-                    ? "text-green-400 border-green-500/30"
+                    ? "text-success border-success/30"
                     : "text-grey border-white/10"
                 }`}
               >

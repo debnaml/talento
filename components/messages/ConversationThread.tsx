@@ -37,22 +37,28 @@ export async function ConversationThread({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: convo } = await supabase
+  const { data: convo, error: convoErr } = await supabase
     .from("conversations")
-    .select(
-      "id, studio_id, talent_id, brief_id, created_at, studio_profiles(company_name), talent_profiles(stage_name, username), casting_briefs(title)",
-    )
+    .select("id, studio_id, talent_id, brief_id, created_at")
     .eq("id", conversationId)
     .maybeSingle();
+  if (convoErr) console.error("[ConversationThread] convo fetch error", convoErr);
   if (!convo) notFound();
+
+  const [{ data: studioRow }, { data: talentRow }, briefRes] = await Promise.all([
+    supabase.from("studio_profiles").select("company_name").eq("id", convo.studio_id).maybeSingle(),
+    supabase.from("talent_profiles").select("stage_name, username").eq("id", convo.talent_id).maybeSingle(),
+    convo.brief_id
+      ? supabase.from("casting_briefs").select("title").eq("id", convo.brief_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+  ]);
 
   const otherId = role === "studio" ? convo.talent_id : convo.studio_id;
   const otherName =
     role === "studio"
-      ? (convo.talent_profiles as { stage_name?: string } | null)?.stage_name ?? "Talent"
-      : (convo.studio_profiles as { company_name?: string } | null)?.company_name ?? "Studio";
-  const briefTitle =
-    (convo.casting_briefs as { title?: string } | null)?.title ?? null;
+      ? talentRow?.stage_name ?? "Talent"
+      : studioRow?.company_name ?? "Studio";
+  const briefTitle = (briefRes?.data as { title?: string } | null)?.title ?? null;
 
   const { data: messages } = await supabase
     .from("messages")

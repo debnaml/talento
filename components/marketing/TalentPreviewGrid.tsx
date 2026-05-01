@@ -1,9 +1,15 @@
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
-// Static preview cards lifted from designs/talento.html .talent-section
-// In Stage 1 the real registry is at /studio/browse (auth-gated).
-// These cards are purely decorative marketing previews.
-const PREVIEW_TALENT = [
+const CATEGORY_LABELS: Record<string, string> = {
+  film: "Film", tv: "TV", advertising: "Advertising", gaming: "Gaming",
+  d2c: "D2C", sports: "Sports", music: "Music", historical: "Historical",
+  stunt: "Stunt", action: "Action", drama: "Drama", comedy: "Comedy",
+};
+
+// Placeholder cards used to fill any remaining slots when fewer than 5
+// talents have opted in to homepage feature.
+const PLACEHOLDERS = [
   { name: "Sarah M.", type: "Film · Advertising", bg: "linear-gradient(180deg, rgba(180,140,100,0.15) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(200,160,120,0.2) 0%, transparent 55%), #111118" },
   { name: "James K.", type: "Action · Gaming",    bg: "linear-gradient(180deg, rgba(100,140,180,0.1) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 35%, rgba(120,160,200,0.15) 0%, transparent 55%), #0f1218" },
   { name: "Priya R.", type: "D2C · Advertising",  bg: "linear-gradient(180deg, rgba(200,160,100,0.18) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 30%, rgba(220,180,120,0.2) 0%, transparent 55%), #131008" },
@@ -11,7 +17,60 @@ const PREVIEW_TALENT = [
   { name: "Aiko N.", type: "Gaming · D2C",        bg: "linear-gradient(180deg, rgba(100,180,140,0.1) 0%, rgba(13,13,16,0.95) 70%), radial-gradient(ellipse at 50% 30%, rgba(120,200,160,0.12) 0%, transparent 55%), #0d1210" },
 ];
 
-export function TalentPreviewGrid() {
+const SLOT_COUNT = 5;
+
+type RealTalent = {
+  id: string;
+  stage_name: string;
+  categories: string[] | null;
+  imageUrl: string | null;
+};
+
+async function fetchFeaturedTalent(): Promise<RealTalent[]> {
+  try {
+    const supabase = await createClient();
+    const { data: rows } = await supabase
+      .from("talent_profiles")
+      .select("id, stage_name, categories, talent_images(storage_path, is_primary)")
+      .eq("published", true)
+      .eq("featured_on_homepage", true)
+      .limit(SLOT_COUNT);
+
+    if (!rows || rows.length === 0) return [];
+
+    return await Promise.all(
+      rows.map(async (t) => {
+        const images = Array.isArray(t.talent_images) ? t.talent_images : [];
+        const primary = images.find((i) => i.is_primary) ?? images[0];
+        let imageUrl: string | null = null;
+        if (primary?.storage_path) {
+          const { data } = await supabase.storage
+            .from("talent-images")
+            .createSignedUrl(primary.storage_path, 3600);
+          imageUrl = data?.signedUrl ?? null;
+        }
+        return {
+          id: t.id,
+          stage_name: t.stage_name,
+          categories: (t.categories as string[] | null) ?? null,
+          imageUrl,
+        };
+      }),
+    );
+  } catch {
+    return [];
+  }
+}
+
+function categoryLabel(cats: string[] | null): string {
+  if (!cats || cats.length === 0) return "Talent";
+  return cats.slice(0, 2).map((c) => CATEGORY_LABELS[c] ?? c).join(" · ");
+}
+
+export async function TalentPreviewGrid() {
+  const real = await fetchFeaturedTalent();
+  const placeholders = PLACEHOLDERS.slice(0, Math.max(0, SLOT_COUNT - real.length));
+
   return (
     <section className="bg-dark px-6 md:px-12 py-24">
       {/* Header */}
@@ -41,19 +100,21 @@ export function TalentPreviewGrid() {
 
       {/* Grid — 6 cols: 5 talent + 1 CTA */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-0.5">
-        {PREVIEW_TALENT.map((t) => (
+        {real.map((t) => (
           <article
-            key={t.name}
-            className="relative aspect-[2/3] bg-dark-3 overflow-hidden cursor-pointer transition-transform hover:scale-[1.03] hover:z-[2]"
+            key={t.id}
+            className="relative aspect-[2/3] bg-dark-3 overflow-hidden transition-transform hover:scale-[1.03] hover:z-[2]"
           >
-            {/* Cinematic portrait gradient */}
-            <div className="absolute inset-0" style={{ background: t.bg }} />
-
-            {/* Abstract face shape */}
-            <div
-              className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[52%] rounded-[50%_50%_44%_44%] bg-white/[0.07]"
-              style={{ paddingBottom: "65%", boxShadow: "inset 0 -10px 20px rgba(0,0,0,0.3)" }}
-            />
+            {t.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={t.imageUrl}
+                alt={t.stage_name}
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-dark-2" />
+            )}
 
             {/* Verified tick */}
             <div className="absolute top-2.5 right-2.5 w-5 h-5 bg-orange flex items-center justify-center text-white text-[10px]">
@@ -61,7 +122,32 @@ export function TalentPreviewGrid() {
             </div>
 
             {/* Info */}
-            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-[rgba(13,13,16,0.98)] to-transparent">
+            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-dark/[0.98] via-dark/60 to-transparent">
+              <div className="font-condensed text-[13px] font-bold uppercase tracking-[1px] text-warm-white">
+                {t.stage_name}
+              </div>
+              <div className="font-condensed text-[10px] uppercase tracking-[1.5px] text-grey mt-0.5">
+                {categoryLabel(t.categories)}
+              </div>
+            </div>
+          </article>
+        ))}
+
+        {placeholders.map((t) => (
+          <article
+            key={t.name}
+            className="relative aspect-[2/3] bg-dark-3 overflow-hidden transition-transform hover:scale-[1.03] hover:z-[2]"
+            aria-hidden="true"
+          >
+            <div className="absolute inset-0" style={{ background: t.bg }} />
+            <div
+              className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[52%] rounded-[50%_50%_44%_44%] bg-white/[0.07]"
+              style={{ paddingBottom: "65%", boxShadow: "inset 0 -10px 20px rgba(0,0,0,0.3)" }}
+            />
+            <div className="absolute top-2.5 right-2.5 w-5 h-5 bg-orange flex items-center justify-center text-white text-[10px]">
+              ✓
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-dark/[0.98] to-transparent">
               <div className="font-condensed text-[13px] font-bold uppercase tracking-[1px] text-warm-white">
                 {t.name}
               </div>
@@ -89,3 +175,4 @@ export function TalentPreviewGrid() {
     </section>
   );
 }
+

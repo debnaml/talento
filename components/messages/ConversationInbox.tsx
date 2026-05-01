@@ -24,12 +24,34 @@ export async function ConversationInbox({ role }: { role: InboxRole }) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const { data: convos } = await supabase
+  const { data: convos, error: convosErr } = await supabase
     .from("conversations")
-    .select(
-      "id, studio_id, talent_id, brief_id, last_message_at, created_at, studio_profiles(company_name), talent_profiles(stage_name), casting_briefs(title)",
-    )
+    .select("id, studio_id, talent_id, brief_id, last_message_at, created_at")
     .order("last_message_at", { ascending: false, nullsFirst: false });
+  if (convosErr) console.error("[ConversationInbox] convos fetch error", convosErr);
+
+  // Preload related profiles + briefs in parallel
+  const studioIds = Array.from(new Set((convos ?? []).map((c) => c.studio_id)));
+  const talentIds = Array.from(new Set((convos ?? []).map((c) => c.talent_id)));
+  const briefIds = Array.from(
+    new Set((convos ?? []).map((c) => c.brief_id).filter((id): id is string => !!id)),
+  );
+
+  const [studiosRes, talentsRes, briefsRes] = await Promise.all([
+    studioIds.length
+      ? supabase.from("studio_profiles").select("id, company_name").in("id", studioIds)
+      : Promise.resolve({ data: [] as { id: string; company_name: string }[] }),
+    talentIds.length
+      ? supabase.from("talent_profiles").select("id, stage_name").in("id", talentIds)
+      : Promise.resolve({ data: [] as { id: string; stage_name: string }[] }),
+    briefIds.length
+      ? supabase.from("casting_briefs").select("id, title").in("id", briefIds)
+      : Promise.resolve({ data: [] as { id: string; title: string }[] }),
+  ]);
+
+  const studioMap = new Map((studiosRes.data ?? []).map((s) => [s.id, s.company_name]));
+  const talentMap = new Map((talentsRes.data ?? []).map((t) => [t.id, t.stage_name]));
+  const briefMap = new Map((briefsRes.data ?? []).map((b) => [b.id, b.title]));
 
   // Preload last message + unread counts for each convo
   const convoIds = (convos ?? []).map((c) => c.id);
@@ -86,10 +108,9 @@ export async function ConversationInbox({ role }: { role: InboxRole }) {
             {convos.map((c) => {
               const other =
                 role === "studio"
-                  ? (c.talent_profiles as { stage_name?: string } | null)?.stage_name ?? "Talent"
-                  : (c.studio_profiles as { company_name?: string } | null)?.company_name ?? "Studio";
-              const briefTitle =
-                (c.casting_briefs as { title?: string } | null)?.title ?? null;
+                  ? talentMap.get(c.talent_id) ?? "Talent"
+                  : studioMap.get(c.studio_id) ?? "Studio";
+              const briefTitle = c.brief_id ? briefMap.get(c.brief_id) ?? null : null;
               const latest = latestByConvo.get(c.id);
               const unread = unreadByConvo.get(c.id) ?? 0;
               return (

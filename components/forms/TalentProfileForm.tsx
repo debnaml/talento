@@ -70,6 +70,7 @@ const schema = z.object({
   allows_d2c: z.boolean(),
   allows_political: z.boolean(),
   allows_adult: z.boolean(),
+  featured_on_homepage: z.boolean(),
   agreement: z.literal(true, { error: "You must confirm this agreement" }),
 });
 
@@ -113,6 +114,7 @@ export function TalentProfileForm({ mode, initial }: Props) {
       allows_d2c: initial?.allows_d2c ?? false,
       allows_political: initial?.allows_political ?? false,
       allows_adult: initial?.allows_adult ?? false,
+      featured_on_homepage: initial?.featured_on_homepage ?? false,
       // In settings mode the user already agreed during onboarding; pre-tick.
       agreement: mode === "settings" ? (true as const) : undefined,
     },
@@ -175,6 +177,7 @@ export function TalentProfileForm({ mode, initial }: Props) {
         allows_d2c: values.allows_d2c,
         allows_political: values.allows_political,
         allows_adult: values.allows_adult,
+        featured_on_homepage: values.featured_on_homepage,
       });
 
     if (profileError) {
@@ -443,6 +446,35 @@ export function TalentProfileForm({ mode, initial }: Props) {
         </div>
       </div>
 
+      {/* Marketing visibility — separate opt-in from registry / AI consent */}
+      <div className="bg-dark-3 p-8 mb-0.5">
+        <h2 className="font-display text-[22px] tracking-[1px] text-warm-white mb-2 leading-none">
+          MARKETING
+        </h2>
+        <p className="font-body text-[13px] font-light text-grey mb-6">
+          Optional. Independent of your registry visibility and licensing
+          consents above.
+        </p>
+
+        <label className="flex items-center justify-between px-4 py-3.5 cursor-pointer hover:bg-mid/30 transition-colors">
+          <div className="pr-4">
+            <span className="font-condensed text-[13px] font-semibold uppercase tracking-[1.5px] text-warm-white block">
+              Feature on Homepage
+            </span>
+            <span className="font-body text-[12px] font-light text-grey block mt-1">
+              Allow your primary photo, stage name and categories to appear in the
+              public &ldquo;Browse Talent&rdquo; preview on the marketing homepage.
+              You can turn this off any time.
+            </span>
+          </div>
+          <input
+            type="checkbox"
+            className="w-4 h-4 accent-orange flex-shrink-0"
+            {...register("featured_on_homepage")}
+          />
+        </label>
+      </div>
+
       {/* Agreement — hide in settings mode (already consented at signup) */}
       {mode === "onboarding" && (
         <div className="bg-dark-3 p-8 mb-6">
@@ -475,8 +507,8 @@ export function TalentProfileForm({ mode, initial }: Props) {
       )}
 
       {savedFlash && (
-        <div className="bg-green-500/10 border border-green-500/30 px-4 py-3 mb-5">
-          <p className="font-condensed text-[12px] text-green-400">
+        <div className="bg-success/10 border border-success/30 px-4 py-3 mb-5">
+          <p className="font-condensed text-[12px] text-success">
             Profile updated.
           </p>
         </div>

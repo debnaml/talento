@@ -13,6 +13,8 @@
   --color-silver: #A0A0B8;
   --color-warm-white: #F4F2EE;
   --color-cream: #EDE9E1;
+  --color-success: #5DB87A;
+  --color-danger: #C04040;
   --font-display: var(--font-bebas);
   --font-condensed: var(--font-barlow-c);
   --font-body: var(--font-barlow);

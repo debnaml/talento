@@ -106,7 +106,7 @@ export default async function TalentUploadPage() {
               Registry Status
             </div>
             {profile.published ? (
-              <div className="font-condensed text-[13px] font-semibold uppercase tracking-[1px] text-green-400">
+              <div className="font-condensed text-[13px] font-semibold uppercase tracking-[1px] text-success">
                 ● Published — visible in registry
               </div>
             ) : (

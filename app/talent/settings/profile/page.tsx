@@ -13,7 +13,7 @@ export default async function TalentSettingsProfilePage() {
   const { data: talent } = await supabase
     .from("talent_profiles")
     .select(
-      "stage_name, username, bio, location, country, age_range, gender, height_cm, categories, allows_film, allows_advertising, allows_gaming, allows_d2c, allows_political, allows_adult"
+      "stage_name, username, bio, location, country, age_range, gender, height_cm, categories, allows_film, allows_advertising, allows_gaming, allows_d2c, allows_political, allows_adult, featured_on_homepage"
     )
     .eq("id", user.id)
     .single();
@@ -35,18 +35,13 @@ export default async function TalentSettingsProfilePage() {
     allows_d2c: talent.allows_d2c ?? false,
     allows_political: talent.allows_political ?? false,
     allows_adult: talent.allows_adult ?? false,
+    featured_on_homepage: talent.featured_on_homepage ?? false,
   };
 
   return (
     <div className="min-h-screen bg-dark px-4 py-16">
       <div className="max-w-[680px] mx-auto">
         <div className="mb-10">
-          <Link
-            href="/talent/dashboard"
-            className="inline-flex items-center gap-1.5 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-grey hover:text-orange transition-colors no-underline mb-4"
-          >
-            ← Dashboard
-          </Link>
           <div className="inline-flex items-center gap-2.5 mb-3">
             <div className="w-6 h-0.5 bg-orange" />
             <span className="font-condensed text-[11px] font-bold uppercase tracking-[4px] text-orange">
@@ -59,12 +54,6 @@ export default async function TalentSettingsProfilePage() {
           <p className="font-body text-[14px] font-light text-grey mt-3">
             Update your details, categories, and consent preferences.
           </p>
-          <Link
-            href="/talent/settings/account"
-            className="inline-flex mt-4 font-condensed text-[11px] font-bold uppercase tracking-[2px] text-silver hover:text-orange transition-colors no-underline"
-          >
-            Account & password →
-          </Link>
         </div>
 
         <TalentProfileForm mode="settings" initial={initial} />

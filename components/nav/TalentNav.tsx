@@ -30,7 +30,7 @@ export function TalentNav({
   }, [mobileOpen]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-6 md:px-12 h-[72px] bg-gradient-to-b from-[rgba(13,13,16,0.98)] to-transparent">
+    <nav className="fixed top-0 left-0 right-0 z-[100] flex items-center justify-between px-6 md:px-6 md:px-12 h-[72px] bg-gradient-to-b from-dark/[0.98] to-transparent">
       <Link
         href="/talent/dashboard"
         className="font-display text-[24px] md:text-[28px] tracking-[3px] text-warm-white no-underline"
